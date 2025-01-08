@@ -7,46 +7,10 @@ named ```Messages-from-the-issuer.yaml```, while the file describing operations 
 Issuer is named ```Messages-to-the-issuer.yaml```. The reference for these files can be found
 on the BankAxept web page.
 
-The files are found in the ```des-web-service-interface``` directory and can be used as a reference
+The files are found in the ```docs/swagger``` directory and can be used as a reference
 to integrate with the BankAxept DES. It is also possible to use these files as input to generating
 code, both for creating a client to access these interfaces and to create server stubs, which can
 be used to create server side implementation.
-
-## des-api-client
-
-This contains client code accessing the api provided by the DES. The code generated is based on
-Java and the Jersey REST framework. This code can be used as an example on how to access the
-DES Web Service Interface.
-
-## des-api-server-stub
-
-This contains server interfaces defining the operations that provided by the DES. The code generated
-is based on java and the Spring MVC framework. This code can be used to set up a mock-implementation
-for testing own code.
-
-## issuer-api-client
-
-This contains client code accessing the api provided by the DES. The code generated is based on
-Java and the Jersey REST framework. This code can be used as an example on how to access the
-operations provided by the issuer.
-
-## issuer-api-server-stub
-
-This contains server interfaces defining the operations that provided by the issuer. The code generated
-is based on java and the Spring MVC framework. This code can be used to set up a mock-implementation
-for testing own code.
-
-## Release
-
-Snapshot versions are not supported, only releases.
-
-In the pull request:
-
-* Update the code/yaml-files
-* Increment version in the `version.txt`
-* Update dependencies by executing `mvn versions:use-latest-versions`
-
-After the pull request is approved and merged the pipeline will build and publish a new release version.
 
 ## MkDocs
 
