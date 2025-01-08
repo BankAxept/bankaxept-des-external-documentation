@@ -2,7 +2,7 @@ site_name: BankAxept DES issuer documentation
 site_dir: _site
 site_url: https://test.com/
 repo_url: https://github.com/BankAxept/bankaxept-des-external-documentation
-repo_name: techcloud0/des-issuer-api
+repo_name: BankAxept/bankaxept-des-external-documentation
 docs_dir: docs
 plugins:
   - mermaid2:
