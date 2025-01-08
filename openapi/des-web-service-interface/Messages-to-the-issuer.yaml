@@ -1,0 +1,727 @@
+openapi: 3.0.3
+info:
+  title: BankAxept - Issuer - DES Web Service Interface
+  description: This is a technical specification of the Web Service Application Programming
+    Interface (API) for the BankAxept Digital Enablement Service (DES) to issuer interface.
+  version: "1.10"
+servers:
+  - url: https://to.be.decided/api/v1/issuer
+paths:
+  /digitizationCompleteNotification:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Digitization complete notification
+      description: DigitizationCompleteNotification is used by BankAxept to notify
+        the issuer of the completion of a digitization process and the activation
+        of a token for a primary account number.
+      operationId: digitizationCompleteNotification
+      requestBody:
+        description: Notification for digitization process completion.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DigitizationCompleteNotification'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /healthCheck:
+    get:
+      tags:
+        - des-to-issuer
+      summary: Check if issuer is healthy
+      description: HealthCheck is used by BankAxept to verify the availability of
+        the issuer’s system. HealthCheck messages will be sent periodically. The
+        exact frequency can be agreed with BankAxept. *Note:* This message is a HTTP
+        GET.
+      operationId: healthCheck
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /notifyCardStatusChange:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Card status change notification
+      description: NotifyCardStatusChange is used by the DES to notify the issuer
+        of token status updates, such as when the token is activated, suspended, resumed
+        or deleted, or when the HCE keys associated with a token have been replenished.
+        It may be triggered either by the wallet or by the DES.
+      operationId: notifyCardStatusChange
+      requestBody:
+        description: Notification for card status change.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotifyCardStatusChangeRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /processCallback:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Process callback
+      description: ProcessCallback is the asynchronous response to a previous request.
+        from the issuer.
+      operationId: processCallback
+      requestBody:
+        description: Process callback.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessCallback'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /requestCardDigitization:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Request card digitization
+      description: |-
+        The DES uses this method to prompt an issuer to authorise a card digitization request. This method provides information about:
+        *  The card and the card capture method, e.g. photo, manual entry or issuer app.
+        *  User accepts or declines of Terms and Conditions.
+        *  Risk scoring and a recommendation made by the Wallet Provider.
+        *  Device and wallet information.
+
+        The issuer then must decide whether to approve or decline the digitization of the card.
+      operationId: requestCardDigitization
+      requestBody:
+        description: Request for getting card digitization status.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCardDigitizationRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestCardDigitizationResponse'
+
+  /requestCoBadgeDigitization:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Request CoBadge digitization
+      description: RequestCoBadgeDigitization is used by the DES to prompt the issuer to provide an eligible BankAxept card when the wallet triggers a request to digitise a co-badged card.
+      operationId: requestCoBadgeDigitization
+      requestBody:
+        description: Request for starting the digitization of coBadge cards.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCoBadgeDigitizationRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestCoBadgeDigitizationResponse'
+  /requestEligibleCard:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Request eligible card
+      description: RequestEligibleCard is used by the DES to prompt the issuer to
+        provide an eligible card to be used when a card digitization request is triggered
+        by the cardholder. The Account and SSN/D-Number will be provided to the issuer
+        to help the issuer to select the correct BankAxept PAN to be used for card
+        digitization.
+      operationId: requestEligibleCard
+      requestBody:
+        description: Request for getting an eligible card.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestEligibleCardRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestEligibleCardResponse'
+components:
+  schemas:
+    AccountInfo:
+      required:
+        - accountNo
+        - ssn
+      type: object
+      properties:
+        accountNo:
+          maxLength: 11
+          minLength: 11
+          type: string
+          description: The account to digitise.
+        ssn:
+          maxLength: 11
+          minLength: 11
+          type: string
+          description: The social security number ("fødselsnummer") of the card-holder.
+            This could be D-number.
+    BaseRequest:
+      type: object
+    BaseResponse:
+      required:
+        - responseCode
+      type: object
+      properties:
+        responseCode:
+          $ref: '#/components/schemas/ResponseCode'
+        errorMessage:
+          $ref: '#/components/schemas/ErrorMessage'
+    CardInfo:
+      required:
+        - exp
+        - fpan
+      type: object
+      properties:
+        cvv:
+          maxLength: 3
+          minLength: 3
+          type: string
+          description: Depending on the Wallet provider, this value may or may not
+            be provided. In the case of InApp enrolment, this data field is not present.
+        exp:
+          maxLength: 4
+          minLength: 4
+          pattern: ^(0[1-9]|1[0-2])(\d{2})$
+          type: string
+          description: The expiry date in the format MMYY.
+        fpan:
+          maxLength: 19
+          type: string
+          description: The funding PAN to digitise.
+        psn:
+          pattern: ^0\d{3}$
+          type: string
+          description: The Pan Sequence Number for the funding Pan to digitise. This will be optional when International card details are provided.
+    DeviceInformation:
+      required:
+        - brand
+        - deviceName
+        - model
+        - tokenStorageId
+        - tokenStorageType
+      type: object
+      properties:
+        appletVersion:
+          maxLength: 32
+          minLength: 1
+          type: string
+          description: Only for ApplePay. Applet version as provided by the Wallet Provider.
+        brand:
+          maxLength: 16
+          minLength: 1
+          type: string
+          description: Device brand.
+        deviceName:
+          maxLength: 128
+          minLength: 1
+          type: string
+          description: |-
+            Device name.
+            
+            The name associated by the end user to the device.
+        ecommerceCertificate:
+          $ref: '#/components/schemas/EcommerceCertificate'
+        language:
+          maxLength: 3
+          minLength: 1
+          type: string
+          description: Only for ApplePay. Device language in ISO 639-3 format.
+        model:
+          maxLength: 16
+          minLength: 1
+          type: string
+          description: Device model.
+        tokenStorageId:
+          $ref: '#/components/schemas/TokenStorageId'
+        tokenStorageType:
+          type: string
+          description: Identify the type token storage location type.
+          enum:
+            - WALLET_SERVER
+            - PHONE
+            - TABLET
+            - WATCH
+            - COMPUTER
+            - UNKNOWN
+    DigitizationCompleteNotification:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - activeTokenCount
+            - decision
+            - issuerCardRefId
+            - issuerId
+            - processId
+            - tokenDetails
+          properties:
+            activeTokenCount:
+              $ref: '#/components/schemas/ActiveTokenCount'
+            decision:
+              type: string
+              description: |-
+                The decision on the initial digitization request.
+                
+                "APPROVE" is used for enrolments that are completed successfully and "DECLINE" is used for all other scenarios.
+              enum:
+                - APPROVE
+                - DECLINE
+            issuerCardRefId:
+              $ref: '#/components/schemas/IssuerCardRefId'
+            issuerId:
+              $ref: '#/components/schemas/IssuerId'
+            paymentAccountReference:
+              $ref: '#/components/schemas/PaymentAccountReference'
+            primaryTokenReferenceId:
+              maxLength: 128
+              type: string
+              description: |-
+                A unique identifier of the primary brand’s token.
+                
+                This parameter is only used for XPays.
+            processId:
+              $ref: '#/components/schemas/ProcessId'
+            tokenDetails:
+              $ref: '#/components/schemas/TokenDetails'
+            walletCardRefId:
+              $ref: '#/components/schemas/WalletCardRefId'
+            walletVirtualCardId:
+              $ref: '#/components/schemas/WalletVirtualCardId'
+    EcommerceCertificate:
+      required:
+        - certificate
+        - keyIdentifier
+      type: object
+      properties:
+        certificate:
+          maxLength: 8196
+          minLength: 1
+          type: string
+          description: The X509 certificate as provided by ApplePay in PEM encoded format.
+        keyIdentifier:
+          maxLength: 32
+          minLength: 1
+          type: string
+          description: The key identifier as provided by ApplePay in hexadecimal format.
+    NotifyCardStatusChangeRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - issuerCardRefId
+            - issuerId
+            - processId
+            - tokenStatusUpdateList
+          properties:
+            issuerCardRefId:
+              $ref: '#/components/schemas/IssuerCardRefId'
+            issuerId:
+              $ref: '#/components/schemas/IssuerId'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
+            tokenStatusUpdateList:
+              type: array
+              items:
+                $ref: '#/components/schemas/TokenStatusUpdate'
+            walletCardRefId:
+              $ref: '#/components/schemas/WalletCardRefId'
+            walletVirtualCardId:
+              $ref: '#/components/schemas/WalletVirtualCardId'
+    ProcessCallback:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - processId
+            - responseCode
+            - tokenReferenceId
+            - tokenRequestorId
+          properties:
+            errorMessage:
+              $ref: '#/components/schemas/ErrorMessage'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
+            responseCode:
+              $ref: '#/components/schemas/ResponseCode'
+            status:
+              type: string
+              description: The result of the operation.
+              enum:
+                - suspended
+                - resumed
+                - deleted
+            tokenReferenceId:
+              $ref: '#/components/schemas/TokenReferenceId'
+            tokenRequestorId:
+              $ref: '#/components/schemas/TokenRequestorId'
+    RequestCardDigitizationRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - activeTokenCount
+            - issuerCardRefId
+            - issuerId
+            - keyIndex
+            - processId
+            - tokenRequestorId
+            - tokenType
+          properties:
+            activeTokenCount:
+              $ref: '#/components/schemas/ActiveTokenCount'
+            deviceInformation:
+              $ref: '#/components/schemas/DeviceInformation'
+            encryptedCardInfo:
+              $ref: '#/components/schemas/EncryptedCardInfo'
+            issuerCardRefId:
+              $ref: '#/components/schemas/IssuerCardRefId'
+            issuerId:
+              $ref: '#/components/schemas/IssuerId'
+            keyIndex:
+              $ref: '#/components/schemas/KeyIndex'
+            paymentAccountReference:
+              $ref: '#/components/schemas/PaymentAccountReference'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
+            riskScore:
+              maximum: 99
+              minimum: 0
+              type: integer
+              description: BankAxept-generated risk score based on BankAxept proprietary
+                risk engine. The value ranges from 0 - 99, with 0 being the lowest risk
+                and 99 being the highest risk.
+              format: int32
+            scoringInformation:
+              $ref: '#/components/schemas/ScoringInformation'
+            tokenRequestorId:
+              $ref: '#/components/schemas/TokenRequestorId'
+            tokenType:
+              $ref: '#/components/schemas/TokenType'
+    RequestCardDigitizationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            decision:
+              type: string
+              description: Issuer Level of trust of the customer and Card Information.
+              enum:
+                - green
+                - red
+            productId:
+              $ref: '#/components/schemas/ProductId'
+            serviceCode:
+              $ref: '#/components/schemas/ServiceCode'
+    RequestCoBadgeDigitizationRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - encryptedCardInfo
+            - encryptionOrigin
+            - issuerId
+            - keyIndex
+            - processId
+            - tokenRequestorId
+            - tokenType
+          properties:
+            activeTokenCount:
+              $ref: '#/components/schemas/ActiveTokenCount'
+            encryptedCardInfo:
+              $ref: '#/components/schemas/EncryptedCardInfo'
+            encryptionOrigin:
+              type: string
+              description: |-
+                A three letter code that indicates who encrypted the international PAN. The possible values are:
+              enum:
+                - DES
+                - TSH
+            issuerCardRefId:
+              $ref: '#/components/schemas/IssuerCardRefId'
+            issuerId:
+              $ref: '#/components/schemas/IssuerId'
+            keyIndex:
+              $ref: '#/components/schemas/KeyIndex'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
+            tokenStorageId:
+              $ref: '#/components/schemas/TokenStorageId'
+            TokenStorageType:
+              type: string
+              description: Identifies the type of token storage location.
+              enum:
+                - WALLET_SERVER
+                - PHONE
+                - TABLET
+                - WATCH
+                - COMPUTER
+                - UNKNOWN
+            tokenRequestorId:
+              $ref: '#/components/schemas/TokenRequestorId'
+            tokenType:
+              $ref: '#/components/schemas/TokenType'
+            walletCardRefId:
+              $ref: '#/components/schemas/WalletCardRefId'
+    RequestCoBadgeDigitizationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            encryptedCardInfo:
+              $ref: '#/components/schemas/EncryptedCardInfo'
+            keyIndex:
+              $ref: '#/components/schemas/KeyIndex'
+            serviceCode:
+              $ref: '#/components/schemas/ServiceCode'
+    RequestEligibleCardRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - encryptedAccountInfo
+            - issuerId
+            - keyIndex
+            - processId
+            - tokenRequestorId
+            - tokenType
+          properties:
+            encryptedAccountInfo:
+              type: string
+              description: Base64-encoded string of encrypted accountInfo.
+            issuerId:
+              $ref: '#/components/schemas/IssuerId'
+            keyIndex:
+              $ref: '#/components/schemas/KeyIndex'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
+            tokenRequestorId:
+              $ref: '#/components/schemas/TokenRequestorId'
+            tokenType:
+              $ref: '#/components/schemas/TokenType'
+    RequestEligibleCardResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            encryptedCardInfo:
+              $ref: '#/components/schemas/EncryptedCardInfo'
+            serviceCode:
+              $ref: '#/components/schemas/ServiceCode'
+            keyIndex:
+              $ref: '#/components/schemas/KeyIndex'
+            productId:
+              $ref: '#/components/schemas/ProductId'
+    ScoringInformation:
+      required:
+        - levelOfTrust
+      type: object
+      properties:
+        levelOfTrust:
+          type: string
+          description: Risk score assigned to an attempted enrolment by the Wallet.
+            Provider
+          enum:
+            - green
+    TokenDetails:
+      required:
+        - token
+        - tokenAssuranceLevel
+        - tokenExpiryDate
+        - tokenReferenceId
+        - tokenRequestorId
+        - tokenStatus
+        - tokenType
+      type: object
+      properties:
+        deviceInformation:
+          $ref: '#/components/schemas/DeviceInformation'
+        token:
+          maxLength: 19
+          type: string
+          description: The token value
+        tokenActivationTime:
+          maxLength: 19
+          minLength: 19
+          type: string
+          description: |-
+            The exact date and time when the token is activated. The format is according to ISO 8601. YYYY-MM-DDThh:mm:ss
+
+            The field is Conditional and only applicable if the token has been activated.
+        tokenExpiryDate:
+          maxLength: 4
+          minLength: 4
+          pattern: ^(0[1-9]|1[0-2])(\d{2})$
+          type: string
+          description: Expiration date of the token, in the format MMYY
+        tokenReferenceId:
+          $ref: '#/components/schemas/TokenReferenceId'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
+        tokenStatus:
+          $ref: '#/components/schemas/TokenStatus'
+        tokenType:
+          $ref: '#/components/schemas/TokenType'
+    TokenStatusUpdate:
+      required:
+        - source
+        - status
+        - tokenReferenceId
+        - tokenRequestorId
+      type: object
+      properties:
+        source:
+          type: string
+          description: The source that initiated the status change.
+          enum:
+            - WALLET
+            - DES
+            - ISSUER
+        status:
+          type: string
+          description: Suspend and resume are only used for XPays, like Apple Pay.
+          enum:
+            - suspended
+            - resumed
+            - deleted
+            - updated
+        tokenReferenceId:
+          $ref: '#/components/schemas/TokenReferenceId'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
+    TokenType:
+      type: string
+      description: |-
+        "EMBEDDED_SE" used for international wallets based on Secure Element (SE).
+
+        "HCE" used for international wallets based on Host Card Emulation (HCE).
+
+        "CARD_ON_FILE" used for ePayment.
+      enum:
+        - EMBEDDED_SE
+        - HCE
+        - CARD_ON_FILE
+    TokenRequestorId:
+      maxLength: 11
+      type: string
+      description: A unique identifier of the token requestor.
+    TokenStatus:
+      type: string
+      description: |-
+        "ACTIVE" or "SUSPENDED" or "DELETED"
+
+        Note: When the DES gets a "DELETED" status while provisioning the card, it is passed on to the Issuer. The Issuer needs the information for tracking purposes.
+      enum:
+        - ACTIVE
+        - SUSPENDED
+        - DELETED
+    TokenReferenceId:
+      maxLength: 32
+      type: string
+      description: A unique identifier of the token
+    EncryptedCardInfo:
+      type: string
+      description:
+        Base64-encoded string of encrypted card information.
+        encryptedCardInfo contains BankAxept details for the easy provisioning use case.
+        In all other cases, encrypt-edCardInfo contains the international card scheme’s details.
+    IssuerId:
+      maxLength: 10
+      type: string
+      description: Unique identifier of the issuer.
+    KeyIndex:
+      maxLength: 500
+      type: string
+      description: An identifier of the key (the fingerprint of the certificate)
+        used to encrypt data between the DES and the Issuer.
+    ProcessId:
+      maxLength: 48
+      type: string
+      description: Unique identifier of enrolment session This identifier must
+        be provided as part of all subsequent call to or from this API concerning
+        this enrolment session.
+    ServiceCode:
+      maxLength: 3
+      type: string
+      description: The ServiceCode of the tokenised card. It is used to determine
+        if STIP is allowed for the tokenised card. The field shall be excluded if the service code is not found.
+    ProductId:
+      maxLength: 32
+      type: string
+      description: The unique configuration identifier associated with the graphical
+        and card art assets.
+    WalletCardRefId:
+      maxLength: 128
+      type: string
+      description: |-
+        Card unique identifier defined by the Wallet Provider or the primary TSP.
+
+        For ApplePay, it corresponds to the FPANID.
+    WalletVirtualCardId:
+      maxLength: 128
+      type: string
+      description: |-
+        Wallet virtual card identifier. 
+
+        For ApplePay, it corresponds to the auxiliary DPANID.
+    IssuerCardRefId:
+      maxLength: 48
+      type: string
+      description: |-
+        A unique identifier for a BankAxept card instance.
+        
+        issuerCardRefId parameter will only have a value in the easy provisioning use case.
+    PaymentAccountReference:
+      maxLength: 29
+      type: string
+      description: |-
+        Payment Account Reference to identify the account of the cardholder.
+        
+        *Note: The issuer may not receive this data in the early release but should be prepared to receive it when it is available.*
+    ResponseCode:
+      type: integer
+      description: Response code
+      format: int32
+    ErrorMessage:
+      maxLength: 500
+      type: string
+      description: Error message in case the response is not OK.
+    ActiveTokenCount:
+      type: integer
+      description: The number of active tokens that already exist for the specific PAN.
+      format: int32
+    TokenStorageId:
+      maxLength: 128
+      type: string
+      description: A unique device identifier.
