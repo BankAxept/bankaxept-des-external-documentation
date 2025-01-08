@@ -1,7 +1,7 @@
 site_name: BankAxept DES issuer documentation
 site_dir: _site
 site_url: https://test.com/
-repo_url: https://github.com/techcloud0/des-issuer-api
+repo_url: https://github.com/BankAxept/bankaxept-des-external-documentation
 repo_name: techcloud0/des-issuer-api
 docs_dir: docs
 plugins:
@@ -23,8 +23,8 @@ nav:
           - Onboarding: onboarding.md
           - Dictionary: dictionary.md
   - API Specs:
-      - DSS issuer API: swagger/messages-from-issuer-api.md
-      - DES expected issuer side API: swagger/messages-to-issuer-api.md
+      - BankAxept DES Issuer API - DES Side: swagger/messages-from-issuer-api.md
+      - BankAxept DES Issuer API - Issuer Service Side: swagger/messages-to-issuer-api.md
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js
   - https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js
