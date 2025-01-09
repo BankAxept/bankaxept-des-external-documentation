@@ -6,7 +6,7 @@ The DES will then send the card to the Issuer Processor for digitization.
 
 # Enrolment flow
 
-The full specification of the requests and responses might be found in our [OpenAPI page](https://desdoc.bankaxept.no/swagger/messages-from-issuer-api/).
+The full specification of the requests and responses might be found in our [OpenAPI page](./swagger/messages-from-issuer-api.md)
 
 Step 1: `RequestCardDigitization`
 

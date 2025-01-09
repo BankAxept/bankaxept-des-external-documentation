@@ -13,7 +13,7 @@ This must then be used to retrieve the card that will be tokenized.
 Once the card is deemed eligible for enrolment, the card is sent to the Issuer Processor for digitization.
 Finally a confirmation is sent back to the Issuer Processor from DES.
 The full specification of the requests and responses might be found in
-our [[OpenAPI page](https://desdoc.bankaxept.no/swagger/messages-from-issuer-api/).
+our [[OpenAPI page](./swagger/messages-from-issuer-api.md).
 
 Step 1: `RequestEligibleCard`
 
@@ -22,7 +22,7 @@ This request intends to retrieve the card that is to be tokenized.
 The requests contain a bank account number and a Norwegian National Identification Number (NNIN).
 The response must contain an encrypted card info as described
 in the [Card Info](./enrolment_common_components.md#card-info). The full API specification of the requests and responses can be found in
-the [OpenAPI page](https://desdoc.bankaxept.no/swagger/messages-from-issuer-api/).
+the [OpenAPI page](./swagger/messages-from-issuer-api.md).
 
 ```mermaid
 
