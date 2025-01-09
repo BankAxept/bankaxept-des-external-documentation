@@ -19,7 +19,7 @@ system.
 ## Setting up your DES integration
 
 There are multiple points of configuration that need to be aligned before you can fully utilize the DES Issuer API. The necessary steps may be found in our
-(Onboarding Guide)[./onboarding.md].
+[Onboarding Guide](./onboarding.md).
 
 ## Integration Guidelines
 

@@ -6,7 +6,7 @@ The DES will then send the card to the Issuer Processor for digitization.
 
 # Enrolment flow
 
-The full specification of the requests and responses might be found in our [TODO-Swagger documentation Task:DOM-1930](https://des.bankaxept.no/swagger/).
+The full specification of the requests and responses might be found in our [OpenAPI page](./swagger/messages-from-issuer-api.md)
 
 Step 1: `RequestCardDigitization`
 
@@ -24,9 +24,9 @@ The issuer may then approve or decline.
 
 sequenceDiagram
     participant DES
-    participant IssuerProcessor
-    DES ->> IssuerProcessor: RequestCardDigitization
-    IssuerProcessor -->> DES: CardDigitizationResponse
+    participant IssuerService
+    DES ->> IssuerService: RequestCardDigitization
+    IssuerService -->> DES: CardDigitizationResponse
 ```
 
 The response must contain a `decision`, indicating whether the card may be digitized or not. Assuming there is a `green` decision then DES will start its'
@@ -42,9 +42,9 @@ Inside the notification is the token and the token expiry date, as well as the r
 
 sequenceDiagram
     participant DES
-    participant IssuerProcessor
-    DES ->> IssuerProcessor: RequestCardDigitization
-    IssuerProcessor -->> DES: CardDigitizationResponse
-    DES ->> IssuerProcessor: DigitizationCompleteNotification
-    IssuerProcessor -->> DES: DigitizationCompleteNotificationResponse
+    participant IssuerService
+    DES ->> IssuerService: RequestCardDigitization
+    IssuerService -->> DES: CardDigitizationResponse
+    DES ->> IssuerService: DigitizationCompleteNotification
+    IssuerService -->> DES: DigitizationCompleteNotificationResponse
 ```

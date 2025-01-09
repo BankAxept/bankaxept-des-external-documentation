@@ -144,7 +144,7 @@ sequenceDiagram
 ### EPP flow
 
 See the dedicated section for more information [here](./enrolment_epayment.md).
-Once an entity(xPay etc.) has started a tokenization process, the following flow
+Once an entity(ePayment integrator etc.) has started a tokenization process, the following flow
 is expected between the Issuer Processor and DES.
 
 ```mermaid
