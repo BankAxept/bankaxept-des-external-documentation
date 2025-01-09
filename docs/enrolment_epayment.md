@@ -13,7 +13,7 @@ This must then be used to retrieve the card that will be tokenized.
 Once the card is deemed eligible for enrolment, the card is sent to the Issuer Processor for digitization.
 Finally a confirmation is sent back to the Issuer Processor from DES.
 The full specification of the requests and responses might be found in
-our [[OpenAPI page](./swagger/messages-from-issuer-api.md).
+our [OpenAPI page](./swagger/messages-from-issuer-api.md).
 
 Step 1: `RequestEligibleCard`
 
