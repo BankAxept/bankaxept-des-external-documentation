@@ -13,7 +13,7 @@ This must then be used to retrieve the card that will be tokenized.
 Once the card is deemed eligible for enrolment, the card is sent to the Issuer Processor for digitization.
 Finally a confirmation is sent back to the Issuer Processor from DES.
 The full specification of the requests and responses might be found in
-our [TODO-Swagger documentation Task:DOM-1930](https://des.bankaxept.no/swagger/).
+our [[OpenAPI page](https://desdoc.bankaxept.no/swagger/messages-from-issuer-api/).
 
 Step 1: `RequestEligibleCard`
 
@@ -22,15 +22,15 @@ This request intends to retrieve the card that is to be tokenized.
 The requests contain a bank account number and a Norwegian National Identification Number (NNIN).
 The response must contain an encrypted card info as described
 in the [Card Info](./enrolment_common_components.md#card-info). The full API specification of the requests and responses can be found in
-the [TODO-Proper-Link Swagger documentation Task:DOM-1930](https://des.bankaxept.no/swagger/).
+the [OpenAPI page](https://desdoc.bankaxept.no/swagger/messages-from-issuer-api/).
 
 ```mermaid
 
 sequenceDiagram
     participant DES
-    participant IssuerProcessor
-    DES ->> IssuerProcessor: RequestEligibleCard
-    IssuerProcessor -->> DES: EligibleCardResponse
+    participant IssuerService
+    DES ->> IssuerService: RequestEligibleCard
+    IssuerService -->> DES: EligibleCardResponse
 ```
 
 Step 2: `RequestCardDigitization`
@@ -49,11 +49,11 @@ The issuer may then approve or decline.
 
 sequenceDiagram
     participant DES
-    participant IssuerProcessor
-    DES ->> IssuerProcessor: RequestEligibleCard
-    IssuerProcessor -->> DES: EligibleCardResponse
-    DES ->> IssuerProcessor: RequestCardDigitization
-    IssuerProcessor -->> DES: CardDigitizationResponse
+    participant IssuerService
+    DES ->> IssuerService: RequestEligibleCard
+    IssuerService -->> DES: EligibleCardResponse
+    DES ->> IssuerService: RequestCardDigitization
+    IssuerService -->> DES: CardDigitizationResponse
 ```
 
 The response must contain a `decision`, indicating whether the card may be digitized or not.
@@ -69,11 +69,11 @@ Inside the notification is the token and the token expiry date, as well as the r
 
 sequenceDiagram
     participant DES
-    participant IssuerProcessor
-    DES ->> IssuerProcessor: RequestEligibleCard
-    IssuerProcessor -->> DES: EligibleCardResponse
-    DES ->> IssuerProcessor: RequestCardDigitization
-    IssuerProcessor -->> DES: CardDigitizationResponse
-    DES ->> IssuerProcessor: DigitizationCompleteNotification
-    IssuerProcessor -->> DES: DigitizationCompleteNotificationResponse
+    participant IssuerService
+    DES ->> IssuerService: RequestEligibleCard
+    IssuerService -->> DES: EligibleCardResponse
+    DES ->> IssuerService: RequestCardDigitization
+    IssuerService -->> DES: CardDigitizationResponse
+    DES ->> IssuerService: DigitizationCompleteNotification
+    IssuerService -->> DES: DigitizationCompleteNotificationResponse
 ```
