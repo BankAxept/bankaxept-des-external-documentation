@@ -25,7 +25,6 @@ in the [Card Info](./enrolment_common_components.md#card-info). The full API spe
 the [OpenAPI page](./swagger/messages-from-issuer-api.md).
 
 ```mermaid
-
 sequenceDiagram
     participant DES
     participant IssuerService
