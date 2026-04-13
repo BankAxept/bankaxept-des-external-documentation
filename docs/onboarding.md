@@ -13,12 +13,12 @@ A series of steps and tests needs to be completed by multiple participants in or
 
 | Step                                   | Explanation                                                                                                             | Participants                                                   |
 |----------------------------------------|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
-| Onboarding registration                | Configure profile values as defined in our [Checklist section](#checklist)                                              | Issuing Bank (Responsible), BankAxept, Issuing Processor       |
+| Onboarding registration                | Configure profile values as defined in our [Checklist section](#checklist-xpays)                                        | Issuing Bank (Responsible), BankAxept, Issuing Processor       |
 | Onboarding Thales                      | Setup bank in Thales Portal. Ordered by BankAxept Command Center.                                                       | BankAxept (Responsible), Thales                                |
-| Testing                                | Agree upon Whitelisted Pilot cards. **Remember** to consider PCI compliance during discussion.                          | Bank(Responsible), BankAxept, TietoEvry                        |
+| Testing                                | Agree upon Whitelisted Pilot cards. **Remember** to consider PCI compliance during discussion.                          | Bank(Responsible), BankAxept, Issuer Processor                 |
 | Key Management                         | Exchange keys.                                                                                                          | BankAxept(Responsible), Thales                                 |
 | Visa Environment                       | Configure VISA values in Prod environment.                                                                              | Bank(Responsible), VISA                                        |
-| Transaction Verification               | Agreement with VISA - change to right PCR.                                                                              | Bank (Responsible), VISA, TietoEvry/Nexi                       |
+| Transaction Verification               | Agreement with VISA - change to right PCR.                                                                              | Bank (Responsible), VISA, Issuer Processor/NETS                |
 | Transaction Verification               | Replace URL in VTS.                                                                                                     | Bank(Responsible), VISA                                        |
 | Transaction Verification               | Dev for Select BankAxept transactions  and Visa.                                                                        | Issuer Processor (Responsible), Bank                           |
 | Transaction Verification               | Establish connectivity to Thales.                                                                                       | BankAxept (Responsible), Thales, Issuer Processor, Bank        |
@@ -38,7 +38,7 @@ Only TLS1.2 or higher is supported.
 A secure exchange of certificates must be performed before any
 communication can be done.
 
-### Checklist
+### Checklist xPays
 
 The following data points and checks are required to be set up in the onboarding process in order to support Apple Pay.
 
@@ -46,3 +46,43 @@ The following data points and checks are required to be set up in the onboarding
 |--------------------------|-----------------------------------------------------------------------------------|
 | Registration data points | Regnumber, Issuer ID and applicable VISA BIN ranges must be sent for registration |
 | Pilot cards              | Bank needs to coordinate which cards should be whitelisted for testing            |
+
+## ePayment
+
+In order to support ePayment with BankAxept a technical configuration is required.
+This includes setting up your Issuing Bank values and account number ranges values in BankAxept.
+
+### Steps to activate
+
+A series of steps and tests needs to be completed by multiple participants in order ensure high quality and compliance.
+
+| Step                     | Explanation                                                                                    | Participants                                             |
+|--------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------|
+| Onboarding registration  | Configure profile values as defined in our [Checklist section](#checklist-epayment)            | Issuing Bank (Responsible), BankAxept, Issuing Processor |
+| Testing                  | Agree upon Whitelisted Pilot cards. **Remember** to consider PCI compliance during discussion. | Bank(Responsible), BankAxept, Issuer Processor           |
+| Key Management           | Exchange keys.  For encrypted card fields in communication.                                    | BankAxept(Responsible)                                   |
+| Enrolment Verification   | Testing Enrolment API.                                                                         | BankAxept (Responsible), Issuer Processor, Bank          |
+| Transaction Verification | Testing Payments.                                                                              | BankAxept (Responsible), Issuer Processor, NETS          |
+| Call Center              | Onboard call centre.                                                                           | Bank(Responsible)                                        |
+| BITS-Certification       | BITS is the banks infrastructure representative and approves major changes                     | BankAxept(Responsible), Nets, Bits                       |
+| Launch Day               | Availability and testing on launch day.                                                        | Bank(Responsible), Issuer Processor                      |
+
+### Setting up Mutual TLS
+
+Mutual TLS must secure all communication.
+Only TLS1.2 or higher is supported.
+A secure exchange of certificates must be performed before any
+communication can be done.
+
+### Checklist ePayment
+
+The following data points and checks are required to be set up in the onboarding process in order to support BankAxept ePayment.
+
+| Step                         | Explanation                                                                                                 |
+|------------------------------|-------------------------------------------------------------------------------------------------------------|
+| Registration data points     | Issuer identification values and applicable issuer account ranges must be sent for registration             |
+| Pilot bank account ranges    | Bank needs to coordinate which bank identifier should be whitelisted for testing enrolment of bank accounts |
+| NETS setup and configuration | NETS needs to be informed and configured for payment transactions.                                          |
+
+Regarding NETS/NEXI setup this should be considered an otherwise normal transaction.
+However, it must be verified by the Issuing processor that there is no remaining configuration required between Issuer Processor and NETS.
