@@ -19,7 +19,7 @@ To this end, EMVCo has specified PAR accordingly:
 fields and transmitted across the payments ecosystem to facilitate consumer identification.
 
 <p align="center">
-<img alt="baxdes_par_availability_zone.png" src="../assets/images/par_structure.png" width="1000"/>
+<img alt="par_structure.png" src="../assets/images/par_structure.png" width="1000"/>
 </p>
 
 
