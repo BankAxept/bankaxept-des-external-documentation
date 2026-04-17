@@ -44,8 +44,9 @@ The PAR Enquiry Service then performs one of the following two actions:
 The following configuration is required to access the PAR Service:
 
 1. A certificate exchange must performed and mTLS must be enabled for all endpoints. The TLS client certificate must be signed by the BankAxept DES CA.
-2.  A key exchange need to be performed to for the encryption and decryption of the PAR data. The integrator must send a public key to BankAxept, which will be used to encrypt the PAR data. The integrator will then be able to decrypt the PAR data using their private key.
-3. IPs need to be whitelisted for production access.
+2.  A key exchange need to be performed to for the encryption and decryption of the PAR data. The integrator must send a public key to BankAxept, which will be used to encrypt the PAR data. The integrator will then be able to decrypt the PAR data using their private key. 
+3. A key exchange for the opposite direction must also be performed for the encryption of PAN/BAN data in the request. The integrator will encrypt the PAN/BAN data using a public key provided by BankAxept, and BankAxept will decrypt the data using the corresponding private key.
+4. IPs need to be whitelisted for production access.
 
 ### Configuration items
 
