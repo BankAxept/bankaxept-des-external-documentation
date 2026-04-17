@@ -6,6 +6,7 @@ This is intended to be a general lightweight reference to reduce confusion and i
 | Term             | Explanation                                                                                                                                                    |
 |------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | API              | Application Programming Interface                                                                                                                              |
+| BAN              | Bank Account Number                                                                                                                                            |
 | DES              | Digital Enablement Service                                                                                                                                     |
 | DES              | Digital Enablement Service. A BankAxept platform for tokenization and payments.                                                                                |
 | GW               | Gateway                                                                                                                                                        |

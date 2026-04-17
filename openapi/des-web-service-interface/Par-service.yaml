@@ -1,0 +1,406 @@
+openapi: '3.0.2'
+info:
+  title: BankAxept PAR API
+  version: '0.0.1'
+servers:
+  - url: http://tbd/des/api/par/v2
+
+paths:
+  /parByPan:
+    post:
+      tags:
+        - par
+      operationId: pan-to-par
+      description: 'Retrieve PAR for Account Number'
+      parameters:
+        - in: header
+          name: x-correlation-id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Unique request ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParPanRequest"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParResponse"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /parByBan:
+    post:
+      tags:
+        - par
+      operationId: ban-to-par
+      description: 'Retrieve PAR for Account Number'
+      parameters:
+        - in: header
+          name: x-correlation-id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Unique request ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParBanRequest"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParResponse"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /bulk/parByPan:
+    post:
+      tags:
+        - par
+      operationId: pan-list-to-par
+      description: 'Retrieve PAR for Account Number'
+      parameters:
+        - in: header
+          name: x-correlation-id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Unique request ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParPanBulkRequest"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParBulkResponse"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /bulk/parByBan:
+    post:
+      tags:
+        - par
+      operationId: ban-list-to-par
+      description: 'Retrieve PAR for Account Number'
+      parameters:
+        - in: header
+          name: x-correlation-id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Unique request ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParBanBulkRequest"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParBulkResponse"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '401':
+          description: unauthorized
+        '403':
+          description: forbidden
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+
+    ParBanRequest:
+      type: object
+      required:
+        - requestorId
+        - encryptedBan
+      properties:
+        requestorId:
+          $ref: "#/components/schemas/RequestorId"
+        encryptionType:
+          $ref: "#/components/schemas/EncryptionType"
+        keyIdentifier:
+          $ref: "#/components/schemas/KeyIdentifier"
+        encryptedBan:
+          type: string
+          description: encrypted payload object containing BAN. See EncryptedBan schema
+          example: --- base64 encoded encrypted payload value ---
+
+    ParPanRequest:
+      type: object
+      required:
+        - requestorId
+        - encryptedPan
+      properties:
+        requestorId:
+          $ref: "#/components/schemas/RequestorId"
+        encryptionType:
+          $ref: "#/components/schemas/EncryptionType"
+        keyIdentifier:
+          $ref: "#/components/schemas/KeyIdentifier"
+        encryptedPan:
+          type: string
+          description: encrypted payload object containing PAN. See EncryptedPan schema
+          example: --- base64 encoded encrypted payload value ---
+
+
+    ParBanBulkRequest:
+      type: object
+      required:
+        - requestorId
+        - encryptedBanList
+      properties:
+        requestorId:
+          $ref: "#/components/schemas/RequestorId"
+        encryptionType:
+          $ref: "#/components/schemas/EncryptionType"
+        keyIdentifier:
+          $ref: "#/components/schemas/KeyIdentifier"
+        encryptedBanList:
+          type: string
+          description: encrypted list of Bank Account Numbers (BAN). See EncryptedBanList schema below for content of encrypted field.
+          example: --- base64 encoded encrypted payload value ---
+
+    ParPanBulkRequest:
+      type: object
+      required:
+        - requestorId
+        - encryptedPanList
+      properties:
+        requestorId:
+          $ref: "#/components/schemas/RequestorId"
+        encryptionType:
+          $ref: "#/components/schemas/EncryptionType"
+        keyIdentifier:
+          $ref: "#/components/schemas/KeyIdentifier"
+        encryptedPanList:
+          type: string
+          description: encrypted list of Primary Account Numbers (PAN). See EncryptedPanList schema below for content of encrypted field.
+          example: --- base64 encoded encrypted payload value ---
+
+    ParBulkResponse:
+      type: object
+      required:
+        - encryptedParList
+      properties:
+        keyIdentifier:
+          $ref: "#/components/schemas/KeyIdentifier"
+        encryptedParMap:
+          type: string
+          description: encrypted field containing a map of PAR and account number values corresponding to account numbers in input. See ParMapPayload schema
+          example: --- base64 encoded encrypted payload value ---
+
+    ParResponse:
+      type: object
+      required:
+        - encryptedPar
+      properties:
+        keyIdentifier:
+          $ref: "#/components/schemas/KeyIdentifier"
+        encryptedPar:
+          type: string
+          description: encrypted payload object containing a PAR value corresponding to input. See ParPayload schema.
+          example: --- base64 encoded encrypted payload value ---
+
+    ErrorResponse:
+      type: object
+      required:
+        - errorMessage
+      properties:
+        errorMessage:
+          $ref: "#/components/schemas/ErrorMessage"
+
+    EncryptionType:
+      type: string
+      enum:
+        - CMS
+      description: Defines the encryption type for the payload. CMS is default. CMS - Cryptographics Message Syntax, JWE - JSON Web Encryption
+      example: CMS
+
+    RequestorId:
+      type: string
+      example: 10690778089
+
+    KeyIdentifier:
+      type: string
+      description: Key identifier for the key used to encrypt the account information
+      example: 090cd54b556ba996124e602822a8c1887997ada4
+
+    ParPayload:
+      type: object
+      properties:
+        par:
+          type: string
+          description: The Payment Account Reference value
+      example: |
+        {
+          "par": "SOME-PAR-VALUE"
+        }
+
+    ParMapPayload:
+      type: object
+      properties:
+        parMap:
+          $ref: "#/components/schemas/ParMap"
+      example: |
+        {
+          "parMap": 
+            {
+              "12345678910":"SOME-PAR-VALUE",
+              "12345678911":"ANOTHER-PAR-VALUE"
+            }
+        }
+
+    ParMap:
+      type: object
+      additionalProperties:
+        type: string
+        description: map of par values with account number as key
+        example: |
+          {
+            "12345678910":"SOME-PAR-VALUE",
+            "12345678911":"ANOTHER-PAR-VALUE",
+            "12345678912":"AND-SO-ON"
+          }
+
+    EncryptedPan:
+      type: object
+      properties:
+        pan:
+          type: string
+          description: Payment Account Number
+      example: |
+        {
+          "pan": "payment-account-number"
+        }
+
+    EncryptedBan:
+      type: object
+      properties:
+        ban:
+          type: string
+          description: Bank Account Number
+      example: |
+        {
+          "ban": "account-number"
+        }
+
+    EncryptedBanList:
+      type: object
+      properties:
+        banList:
+          $ref: "#/components/schemas/EncryptedAccountList"
+      example: |
+        {
+          "banList": ["account1", "account2"]
+        }
+
+    EncryptedPanList:
+      type: object
+      properties:
+        panList:
+          $ref: "#/components/schemas/EncryptedAccountList"
+      example: |
+        {
+          "panList": ["account1", "account2"]
+        }
+
+    EncryptedAccountList:
+      type: array
+      maxItems: 100
+      items:
+        type: string
+        description: List of account numbers, either PAN or BAN
+
+    ErrorMessage:
+      type: string
+      description: |
+        Message describing reason for error code. The following messages can occur per HTTP code:
+        
+        HTTP 400:
+        - Invalid account number
+        - Invalid key identifier
+        - Invalid requestor id
+        - Missing account number
+        - Missing requestor id
+        
+        HTTP 500:
+        - Unexpected error occurred
+        
+        List of messages can be expanded in the future, so should not be validated.

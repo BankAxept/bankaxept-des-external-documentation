@@ -14,6 +14,7 @@ nav:
   - Documentation:
       - Introduction: getting_started.md
       - Tokenization: tokenization.md
+      - PAR service: par_service.md
       - Enrolment flows:
           - Epayment: enrolment_epayment.md
           - xPays: enrolment_xpays.md
@@ -25,6 +26,7 @@ nav:
   - API Specs:
       - BankAxept DES Issuer API - DES Side: swagger/messages-from-issuer-api.md
       - BankAxept DES Issuer API - Issuer Service Side: swagger/messages-to-issuer-api.md
+      - PAR Service - DES Side: swagger/par-service-api.md
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js
   - https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js
