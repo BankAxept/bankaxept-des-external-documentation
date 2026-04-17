@@ -12,6 +12,10 @@ const swaggerUrls = {
         // replace the url with the raw PAR Services one when the API is public
         url: "https://raw.githubusercontent.com/BankAxept/bankaxept-des-external-documentation/refs/heads/main/openapi/des-web-service-interface/Messages-to-the-issuer.yaml"
     },
+    "swagger-par-service-api": {
+        name: "BankAxept DES PAR Service API",
+        url: "https://raw.githubusercontent.com/BankAxept/bankaxept-des-external-documentation/refs/heads/main/openapi/des-web-service-interface/Par-service.yaml"
+    },
 }
 
 const loadSwaggerUIBundle = function (id, url) {
