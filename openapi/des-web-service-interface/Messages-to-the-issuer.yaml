@@ -680,7 +680,7 @@ components:
       maxLength: 32
       type: string
       description: The unique configuration identifier associated with the graphical
-        and card art assets.
+        and card art assets. Currently only BANKAXEPT_DEBIT is supported.
     WalletCardRefId:
       maxLength: 128
       type: string

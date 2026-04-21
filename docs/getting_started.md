@@ -37,6 +37,17 @@ Is used in enrolment. Must be provided as part of all subsequent API calls to or
 All timestamps must be in UTC and in ISO8601 format YYYY-MM-DDThh:mm:ss.
 We recommend using a library for this, as it is crucial not to make mistakes with timestamps.
 
+### Health check
+
+As an integrator you must maintain a health check endpoint. This is an endpoint that BankAxept will call periodically to check if the service is up and running. The endpoint should return a 200 OK status code if the service is healthy.
+It necessary for the monitoring and metrics operations in BankAxept, and to trigger alerts if the service is not available.
+
+## Token Requestor mappings
+
+BankAxept will provide the Token Requestor Ids for each token requestor. 
+These must be used in all communication with the DES and the Issuer Processor.
+Contact BankAxept for more information on this.
+
 ## Checklist before going live.
 
 | Action point       | Description                                                                      |
@@ -79,7 +90,26 @@ This is since the issuers are handling the card state while DES is only handling
 
 See our [Dictionary](./dictionary.md) for a list of terms used in the BankAxept ecosystem.
 
-# Response Codes
+## Error handling guidelines
+
+In the case of an error the integrator should expect a standard HTTP code based response.
+Along with a response body containing a response code and an error message.
+
+```json
+{
+  "BaseResponse": {
+    "responseCode": 1001,
+    "errorMessage": "Illegal operation"
+  }
+}
+```
+
+### Response statuses integrator side
+
+Integrators should align on their side with the same pattern described above.
+If the Response Code table is insufficient please contact BankAxept to align on new codes and their meaning.
+
+## Response Codes
 
 The following response codes are used in the API. These might be changed or expanded in the future.
 
