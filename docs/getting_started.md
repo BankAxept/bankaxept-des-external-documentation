@@ -39,14 +39,14 @@ We recommend using a library for this, as it is crucial not to make mistakes wit
 
 ### Health check
 
-The health check is must be available at all times. 
-It is used by BankAxept to monitor the health of the connection and to trigger alerts if the service is not available.
+As an integrator you must maintain a health check endpoint. This is an endpoint that BankAxept will call periodically to check if the service is up and running. The endpoint should return a 200 OK status code if the service is healthy, and a 500 Internal Server Error status code if the service is not healthy.
+It necessary for the monitoring and metrics operations in BankAxept, and to trigger alerts if the service is not available.
 
 ## Token Requestor mappings
 
 BankAxept will provide the Token Requestor Ids for each token requestor. 
 These must be used in all communication with the DES and the Issuer Processor.
-Contact your BankAxept contact for more information on this.
+Contact BankAxept for more information on this.
 
 ## Checklist before going live.
 
@@ -104,7 +104,7 @@ Along with a response body containing a response code and an error message.
 }
 ```
 
-### Response statuses Integrator side
+### Response statuses integrator side
 
 Integrators should align on their side with the same pattern described above.
 If the Response Code table is insufficient please contact BankAxept to align on new codes and their meaning.
