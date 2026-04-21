@@ -39,7 +39,7 @@ We recommend using a library for this, as it is crucial not to make mistakes wit
 
 ### Health check
 
-As an integrator you must maintain a health check endpoint. This is an endpoint that BankAxept will call periodically to check if the service is up and running. The endpoint should return a 200 OK status code if the service is healthy, and a 500 Internal Server Error status code if the service is not healthy.
+As an integrator you must maintain a health check endpoint. This is an endpoint that BankAxept will call periodically to check if the service is up and running. The endpoint should return a 200 OK status code if the service is healthy.
 It necessary for the monitoring and metrics operations in BankAxept, and to trigger alerts if the service is not available.
 
 ## Token Requestor mappings
