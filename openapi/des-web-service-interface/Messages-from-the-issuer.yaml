@@ -117,7 +117,7 @@ paths:
         *  **Update by tokenReferenceId and tokenRequestorId**: the response provides information on the updated token associated with the combination of the tokenReferenceId and token-RequestorId.
         *  **Update by the issuerCardRefId**: the response provides information for all updated tokens associated with the card instance. Note: Update by the issuerCardRefId does not apply for resume.
 
-        If no token information is included, all the tokens associated with the card will be updated. If ei-ther (token) or (tokenRequestorId and tokenReferenceId) is included, only the specific token will be updated.
+        If no token information is included, all the tokens associated with the card will be updated. If either (token) or (tokenRequestorId and tokenReferenceId) is included, only the specific token will be updated.
 
         **Note**: When a PAN is suspended (issuerCardRefId), all tokens associated to the PAN are suspended. To resume tokens the request needs to specify the specific token (tokenReferenceId).
       operationId: updateCardState
@@ -151,13 +151,13 @@ components:
       required:
         - responseCode
       properties:
-          responseCode:
-            type: integer
-            description: Response code
-          errorMessage:
-            maxLength: 500
-            type: string
-            description: Error message in case the response is not OK.
+        responseCode:
+          type: integer
+          description: Response code
+        errorMessage:
+          maxLength: 500
+          type: string
+          description: Error message in case the response is not OK.
     DeviceInformation:
       required:
         - tokenStorageId
@@ -240,6 +240,11 @@ components:
               type: string
               description: The token value. When this data is used for the inquiry, the
                 response will return information for the specific token.
+            encryptedToken:
+              type: string
+              description: Base64-encoded string of encrypted token PAN (tpan). When
+                this data is used for the inquiry, the response will return information for the
+                specific token.
             tokenReferenceId:
               maxLength: 32
               type: string
@@ -351,13 +356,13 @@ components:
             $ref: '#/components/schemas/TokenInfo'
     TokenDetails:
       required:
-        - token
         - tokenAssuranceLevel
         - tokenExpiryDate
         - tokenReferenceId
         - tokenRequestorId
         - tokenStatus
         - tokenType
+        - keyIndex
       type: object
       properties:
         deviceInformation:
@@ -366,6 +371,9 @@ components:
           maxLength: 19
           type: string
           description: The token value.
+        encryptedToken:
+          type: string
+          description: Base64-encoded string of encrypted token PAN (tpan).
         tokenActivationTime:
           maxLength: 19
           minLength: 19
@@ -407,6 +415,11 @@ components:
             - EMBEDDED_SE
             - HCE
             - CARD_ON_FILE
+        keyIndex:
+          maxLength: 500
+          type: string
+          description: An identifier of the key (the fingerprint of the certificate)
+            used to encrypt data between the DES and the Issuer.
     TokenInfo:
       required:
         - tokenReferenceId
@@ -451,6 +464,9 @@ components:
           maxLength: 19
           type: string
           description: The token value.
+        encryptedToken:
+          type: string
+          description: Base64-encoded string of encrypted token PAN (tpan).
         tokenReferenceId:
           maxLength: 32
           type: string
