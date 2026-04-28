@@ -54,8 +54,7 @@ paths:
       summary: Card status change notification
       description: NotifyCardStatusChange is used by the DES to notify the issuer
         of token status updates, such as when the token is activated, suspended, resumed
-        or deleted, or when the HCE keys associated with a token have been replenished.
-        It may be triggered either by the wallet or by the DES.
+        or deleted. It may be triggered either by the wallet or by the DES.
       operationId: notifyCardStatusChange
       requestBody:
         description: Notification for card status change.
@@ -76,8 +75,7 @@ paths:
       tags:
         - des-to-issuer
       summary: Process callback
-      description: ProcessCallback is the asynchronous response to a previous request.
-        from the issuer.
+      description: ProcessCallback is a asynchronous response to a previous request from the issuer.
       operationId: processCallback
       requestBody:
         description: Process callback.
@@ -127,14 +125,35 @@ paths:
       tags:
         - des-to-issuer
       summary: Request CoBadge digitization
-      description: RequestCoBadgeDigitization is used by the DES to prompt the issuer to provide an eligible BankAxept card when the wallet triggers a request to digitise a co-badged card.
+      description: RequestCoBadgeDigitization is used by the DES to prompt the issuer to provide an eligible BankAxept card when the wallet triggers a request to digitize a co-badged card.
       operationId: requestCoBadgeDigitization
       requestBody:
-        description: Request for starting the digitization of coBadge cards.
+        description: Request for starting the digitization of a co-badged card.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/RequestCoBadgeDigitizationRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestCoBadgeDigitizationResponse'
+  /requestCoBadgeDigitizationByToken:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Request CoBadge digitization using a token
+      description: RequestCoBadgeDigitizationByToken is used by the DES to prompt the issuer to provide an eligible BankAxept card when the wallet triggers a request to digitize a co-badged card using a token.
+      operationId: requestCoBadgeDigitizationByToken
+      requestBody:
+        description: Request for starting the digitization of a co-badged card using a token.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCoBadgeDigitizationByTokenRequest'
         required: true
       responses:
         200:
@@ -180,13 +199,13 @@ components:
           maxLength: 11
           minLength: 11
           type: string
-          description: The account to digitise.
+          description: The account to digitize.
         ssn:
           maxLength: 11
           minLength: 11
           type: string
           description: The social security number ("fødselsnummer") of the card-holder.
-            This could be D-number.
+            This could be a D-number.
     BaseRequest:
       type: object
     BaseResponse:
@@ -219,17 +238,13 @@ components:
         fpan:
           maxLength: 19
           type: string
-          description: The funding PAN to digitise.
+          description: The funding PAN to digitize.
         psn:
           pattern: ^0\d{3}$
           type: string
-          description: The Pan Sequence Number for the funding Pan to digitise. This will be optional when International card details are provided.
+          description: The Pan Sequence Number for the funding PAN to digitize.
     DeviceInformation:
       required:
-        - brand
-        - deviceName
-        - model
-        - tokenStorageId
         - tokenStorageType
       type: object
       properties:
@@ -247,10 +262,7 @@ components:
           maxLength: 128
           minLength: 1
           type: string
-          description: |-
-            Device name.
-            
-            The name associated by the end user to the device.
+          description: The name associated by the end user to the device.
         ecommerceCertificate:
           $ref: '#/components/schemas/EcommerceCertificate'
         language:
@@ -266,15 +278,7 @@ components:
         tokenStorageId:
           $ref: '#/components/schemas/TokenStorageId'
         tokenStorageType:
-          type: string
-          description: Identify the type token storage location type.
-          enum:
-            - WALLET_SERVER
-            - PHONE
-            - TABLET
-            - WATCH
-            - COMPUTER
-            - UNKNOWN
+          $ref: '#/components/schemas/TokenStorageType'
     DigitizationCompleteNotification:
       allOf:
         - $ref: '#/components/schemas/BaseRequest'
@@ -308,9 +312,8 @@ components:
               maxLength: 128
               type: string
               description: |-
-                A unique identifier of the primary brand’s token.
-                
-                This parameter is only used for XPays.
+                A unique identifier of the primary token provider's token.
+                This parameter is only used for co-badged digitization.
             processId:
               $ref: '#/components/schemas/ProcessId'
             tokenDetails:
@@ -455,19 +458,17 @@ components:
             - keyIndex
             - processId
             - tokenRequestorId
+            - tokenStorageId
             - tokenType
+            - TokenStorageType
+            - walletCardRefId
           properties:
             activeTokenCount:
               $ref: '#/components/schemas/ActiveTokenCount'
             encryptedCardInfo:
               $ref: '#/components/schemas/EncryptedCardInfo'
             encryptionOrigin:
-              type: string
-              description: |-
-                A three letter code that indicates who encrypted the international PAN. The possible values are:
-              enum:
-                - DES
-                - TSH
+              $ref: '#/components/schemas/EncryptionOrigin'
             issuerCardRefId:
               $ref: '#/components/schemas/IssuerCardRefId'
             issuerId:
@@ -479,15 +480,7 @@ components:
             tokenStorageId:
               $ref: '#/components/schemas/TokenStorageId'
             TokenStorageType:
-              type: string
-              description: Identifies the type of token storage location.
-              enum:
-                - WALLET_SERVER
-                - PHONE
-                - TABLET
-                - WATCH
-                - COMPUTER
-                - UNKNOWN
+              $ref: '#/components/schemas/TokenStorageType'
             tokenRequestorId:
               $ref: '#/components/schemas/TokenRequestorId'
             tokenType:
@@ -505,6 +498,39 @@ components:
               $ref: '#/components/schemas/KeyIndex'
             serviceCode:
               $ref: '#/components/schemas/ServiceCode'
+    RequestCoBadgeDigitizationByTokenRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - encryptedTokenInfo
+            - encryptionOrigin
+            - keyIndex
+            - processId
+            - tokenRequestorId
+            - tokenStorageId
+            - tokenType
+            - tokenStorageType
+            - walletCardRefId
+          properties:
+            encryptedTokenInfo:
+              $ref: '#/components/schemas/EncryptedTokenInfo'
+            encryptionOrigin:
+              $ref: '#/components/schemas/EncryptionOrigin'
+            keyIndex:
+              $ref: '#/components/schemas/KeyIndex'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
+            tokenStorageId:
+              $ref: '#/components/schemas/TokenStorageId'
+            tokenStorageType:
+              $ref: '#/components/schemas/TokenStorageType'
+            tokenRequestorId:
+              $ref: '#/components/schemas/TokenRequestorId'
+            tokenType:
+              $ref: '#/components/schemas/TokenType'
+            walletCardRefId:
+              $ref: '#/components/schemas/WalletCardRefId'
     RequestEligibleCardRequest:
       allOf:
         - $ref: '#/components/schemas/BaseRequest'
@@ -646,6 +672,16 @@ components:
         - ACTIVE
         - SUSPENDED
         - DELETED
+    TokenStorageType:
+      type: string
+      description: Identifies the type of token storage location.
+      enum:
+        - WALLET_SERVER
+        - PHONE
+        - TABLET
+        - WATCH
+        - COMPUTER
+        - UNKNOWN
     TokenReferenceId:
       maxLength: 32
       type: string
@@ -656,6 +692,19 @@ components:
         Base64-encoded string of encrypted card information.
         encryptedCardInfo contains BankAxept details for the easy provisioning use case.
         In all other cases, encrypt-edCardInfo contains the international card scheme’s details.
+    EncryptedTokenInfo:
+      type: string
+      description:
+        Base64-encoded string of encrypted token information.
+        encryptedTokenInfo contains the token used to represent the card, along with the tokens ID and the ID of the token requester.
+        The information should already by known by the Issuer Processor, and is used to lookup the associated BankAxept card.
+    EncryptionOrigin:
+      type: string
+      description: |-
+        A code indicating who encrypted the ciphertext. The possible values are:
+      enum:
+        - DES
+        - TSH
     IssuerId:
       maxLength: 10
       type: string
@@ -666,21 +715,20 @@ components:
       description: An identifier of the key (the fingerprint of the certificate)
         used to encrypt data between the DES and the Issuer.
     ProcessId:
-      maxLength: 48
+      maxLength: 120
       type: string
-      description: Unique identifier of enrolment session This identifier must
-        be provided as part of all subsequent call to or from this API concerning
-        this enrolment session.
+      description: Unique identifier of the session. This identifier must
+        be provided as part of all subsequent call to or from this API related to this session.
     ServiceCode:
       maxLength: 3
       type: string
-      description: The ServiceCode of the tokenised card. It is used to determine
-        if STIP is allowed for the tokenised card. The field shall be excluded if the service code is not found.
+      description: The ServiceCode of the tokenized card. It is used to determine
+        if STIP is allowed for the tokenized card. The field shall be excluded if the service code is not found.
     ProductId:
       maxLength: 32
       type: string
       description: The unique configuration identifier associated with the graphical
-        and card art assets. Currently only BANKAXEPT_DEBIT is supported.
+        and card art assets.
     WalletCardRefId:
       maxLength: 128
       type: string
@@ -711,8 +759,40 @@ components:
         *Note: The issuer may not receive this data in the early release but should be prepared to receive it when it is available.*
     ResponseCode:
       type: integer
-      description: Response code
       format: int32
+      description: |
+        |Response code | Description|
+        |-------|-------|
+        |0|Success|
+        |<b>100-999</b>|<b>Wallet-related error codes</b>|
+        |113|Unknown issuer|
+        |115|Unknown product|          
+        |116|Unknown card (service code unknown etc.)|
+        |119|Unknown virtual card|
+        |221|Device or Wallet Provider not accessible after retries|
+        |322|Time to live of the operation expired|
+        |911|Operation failed|
+        |921|Unexpected server error|
+        |||
+        ||<b>Functional</b>|
+        |1000|Not found|
+        |1001|Illegal operation|
+        |1002|Card expired|
+        |1003|Card suspended|
+        |1004|Card revoked or deleted|
+        |1009|Invalid change of state|
+        |1010|Invalid change of state since the token is deleted|
+        |1011|Card already exists in the DES with same PAN, card sequence number and expiry date. Only deleted tokens pointing to the card to be replaced exist in the DES.|
+        |1012|Card already exists in the DES with same PAN, card sequence number and expiry date. Active or suspended tokens pointing to the card to be replaced exist in the DES.|
+        |1013|Card already exists in the DES with the same PAN, card sequence number but different expiry date.|
+        |||
+        ||<b>Format errors</b>|
+        |2000|Missing parameter|
+        |2001|Invalid format|
+        |||
+        ||<b>System errors</b>|
+        |3000|Internal error (Server error)|
+        |3001|Internal error (General error)|
     ErrorMessage:
       maxLength: 500
       type: string
