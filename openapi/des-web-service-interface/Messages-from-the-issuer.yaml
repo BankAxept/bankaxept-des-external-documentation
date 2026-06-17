@@ -48,6 +48,11 @@ paths:
           description: Trace Identifier following the request.
           schema:
             type: string
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
+          schema:
+            type: string
       requestBody:
         description: Request for token inquiry.
         content:
@@ -83,6 +88,11 @@ paths:
         - name: tid
           in: header
           description: Trace Identifier following the request.
+          schema:
+            type: string
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
           schema:
             type: string
       requestBody:
@@ -125,6 +135,11 @@ paths:
         - name: tid
           in: header
           description: Trace Identifier following the request.
+          schema:
+            type: string
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
           schema:
             type: string
       requestBody:
@@ -243,7 +258,7 @@ components:
             encryptedToken:
               type: string
               description: Base64-encoded string of encrypted token PAN (tpan). When
-                this data is used for the inquiry, the response will return information for the 
+                this data is used for the inquiry, the response will return information for the
                 specific token.
             tokenReferenceId:
               maxLength: 32

@@ -16,6 +16,12 @@ paths:
         the issuer of the completion of a digitization process and the activation
         of a token for a primary account number.
       operationId: digitizationCompleteNotification
+      parameters:
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
+          schema:
+            type: string
       requestBody:
         description: Notification for digitization process completion.
         content:
@@ -56,6 +62,12 @@ paths:
         of token status updates, such as when the token is activated, suspended, resumed
         or deleted. It may be triggered either by the wallet or by the DES.
       operationId: notifyCardStatusChange
+      parameters:
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
+          schema:
+            type: string
       requestBody:
         description: Notification for card status change.
         content:
@@ -105,6 +117,12 @@ paths:
 
         The issuer then must decide whether to approve or decline the digitization of the card.
       operationId: requestCardDigitization
+      parameters:
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
+          schema:
+            type: string
       requestBody:
         description: Request for getting card digitization status.
         content:
@@ -119,7 +137,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RequestCardDigitizationResponse'
-
   /requestCoBadgeDigitization:
     post:
       tags:
@@ -127,6 +144,12 @@ paths:
       summary: Request CoBadge digitization
       description: RequestCoBadgeDigitization is used by the DES to prompt the issuer to provide an eligible BankAxept card when the wallet triggers a request to digitize a co-badged card.
       operationId: requestCoBadgeDigitization
+      parameters:
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
+          schema:
+            type: string
       requestBody:
         description: Request for starting the digitization of a co-badged card.
         content:
@@ -148,6 +171,12 @@ paths:
       summary: Request CoBadge digitization using a token
       description: RequestCoBadgeDigitizationByToken is used by the DES to prompt the issuer to provide an eligible BankAxept card when the wallet triggers a request to digitize a co-badged card using a token.
       operationId: requestCoBadgeDigitizationByToken
+      parameters:
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
+          schema:
+            type: string
       requestBody:
         description: Request for starting the digitization of a co-badged card using a token.
         content:
@@ -173,6 +202,12 @@ paths:
         to help the issuer to select the correct BankAxept PAN to be used for card
         digitization.
       operationId: requestEligibleCard
+      parameters:
+        - name: x-issuer-id-header
+          in: header
+          description: Issuer Identifier for the request. Is the same as in the request body.
+          schema:
+            type: string
       requestBody:
         description: Request for getting an eligible card.
         content:
