@@ -48,11 +48,7 @@ paths:
           description: Trace Identifier following the request.
           schema:
             type: string
-        - name: x-issuer-id-header
-          in: header
-          description: Issuer Identifier for the request. Is the same as in the request body.
-          schema:
-            type: string
+        - $ref: '#/components/parameters/IssuerID'
       requestBody:
         description: Request for token inquiry.
         content:
@@ -90,11 +86,7 @@ paths:
           description: Trace Identifier following the request.
           schema:
             type: string
-        - name: x-issuer-id-header
-          in: header
-          description: Issuer Identifier for the request. Is the same as in the request body.
-          schema:
-            type: string
+        - $ref: '#/components/parameters/IssuerID'
       requestBody:
         description: Request for replacing card details.
         content:
@@ -137,11 +129,7 @@ paths:
           description: Trace Identifier following the request.
           schema:
             type: string
-        - name: x-issuer-id-header
-          in: header
-          description: Issuer Identifier for the request. Is the same as in the request body.
-          schema:
-            type: string
+        - $ref: '#/components/parameters/IssuerID'
       requestBody:
         description: Request for updating token status.
         content:
@@ -525,3 +513,10 @@ components:
               maxLength: 48
               type: string
               description: Process identifier
+  parameters:
+    IssuerID:
+      name: issuer-id
+      in: header
+      description: Issuer Identifier for the request. Is the same as in the request body.
+      schema:
+        type: string
