@@ -5,7 +5,7 @@ info:
     Interface (API) for the BankAxept Digital Enablement Service (DES) to issuer interface.
   version: "1.10"
 servers:
-  - url: https://to.be.decided/api/v1/issuer
+  - url: https://[bax.main.server]/des/api/issuer/v1
 paths:
   /digitizationCompleteNotification:
     post:
