@@ -4,8 +4,6 @@ info:
   description: This is a technical specification of the Web Service Application Programming
     Interface (API) for the BankAxept Digital Enablement Service (DES) to issuer interface.
   version: "1.10"
-servers:
-  - url: https://to.be.decided/api/v1/issuer
 paths:
   /digitizationCompleteNotification:
     post:
