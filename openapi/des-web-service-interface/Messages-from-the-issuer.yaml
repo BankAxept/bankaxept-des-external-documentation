@@ -77,6 +77,7 @@ paths:
         * Product Id.
 
         The DES also supports batch card replacement via this API. In such case, the replaceCardDetailsList can contain up to 99 individual records.
+        **Note:** `replaceCardDetailsList` is deprecated — use `replaceCardDetails` for new integrations.
 
         *encryptedNewCardPan field containing a Base64-encoded encrypted newCardPan. The issuer will receive from BankAxept the certificate to be used when encrypting the data to BankAxept.*
       operationId: replaceCard
@@ -298,7 +299,6 @@ components:
           required:
             - issuerId
             - keyIndex
-            - replaceCardDetailsList
           properties:
             issuerId:
               maxLength: 10
@@ -309,27 +309,47 @@ components:
               type: string
               description: An identifier of the key (the fingerprint of the certificate)
                 used to encrypt data between the DES and the Issuer.
+            replaceCardDetails:
+              description: Details of the card to be replaced and the new card information.
+              $ref: '#/components/schemas/ReplaceCardDetails'
             replaceCardDetailsList:
+              deprecated: true
               maxItems: 99
               type: array
-              description: Details of the card to be replaced and the new card information.
+              description: >
+                **Deprecated** — use `replaceCardDetails` instead.
+                Details of the card to be replaced and the new card information.
                 If more than one card is to be replaced (batch replacement), one record
                 per card must be provided.
               items:
                 $ref: '#/components/schemas/ReplaceCardDetails'
+        - oneOf:
+            - required:
+                - replaceCardDetails
+            - required:
+                - replaceCardDetailsList
     ReplaceCardResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
         - type: object
-          required:
-            - responseDetailsLcmList
           properties:
+            responseDetailsLcm:
+              description: Result of the replacement action for a single card.
+              $ref: '#/components/schemas/ResponseDetailsLcm'
             responseDetailsLcmList:
+              deprecated: true
               type: array
-              description: Result(s) of the replacement action. If more than one card
+              description: >
+                **Deprecated** — `responseDetailsLcm` will be sent in response instead.
+                Result(s) of the replacement action. If more than one card
                 is to be replaced, one result per card will be returned.
               items:
                 $ref: '#/components/schemas/ResponseDetailsLcm'
+        - oneOf:
+            - required:
+                - responseDetailsLcm
+            - required:
+                - responseDetailsLcmList
     ResponseDetailsLcm:
       required:
         - issuerCardRefId
