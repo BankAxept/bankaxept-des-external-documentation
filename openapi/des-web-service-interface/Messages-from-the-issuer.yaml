@@ -509,27 +509,40 @@ components:
         - type: object
           required:
             - issuerId
-            - updateCardDetailsList
           properties:
             issuerId:
               maxLength: 10
               type: string
               description: Unique identifier of the issuer.
+            updateCardDetails:
+              description: Details of the card to be updated.
+              $ref: '#/components/schemas/UpdateCardDetails'
             updateCardDetailsList:
+              deprecated: true
               maxItems: 99
               type: array
-              description: List of UpdateCardDetails records.
+              description: >
+                **Deprecated** — use `UpdateCardDetails` instead.
+                List of UpdateCardDetails records.
               items:
                 $ref: '#/components/schemas/UpdateCardDetails'
+        - oneOf:
+            - required:
+                - updateCardDetails
+            - required:
+                - updateCardDetailsList
     UpdateCardStateResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
         - type: object
           required:
             - processId
-            - responseDetailsLcmList
           properties:
+            responseDetailsLcm:
+              description: Result of the update card action for a single card.
+              $ref: '#/components/schemas/ResponseDetailsLcm'
             responseDetailsLcmList:
+              deprecated: true
               type: array
               description: The details of the state update actions.
               items:
@@ -538,6 +551,11 @@ components:
               maxLength: 48
               type: string
               description: Process identifier
+        - oneOf:
+            - required:
+                - responseDetailsLcm
+            - required:
+                - responseDetailsLcmList
   parameters:
     IssuerID:
       name: issuer-id
