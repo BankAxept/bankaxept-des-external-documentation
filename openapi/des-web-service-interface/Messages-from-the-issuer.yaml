@@ -242,8 +242,9 @@ components:
             token:
               maxLength: 19
               type: string
-              description: The token value. When this data is used for the inquiry, the
-                response will return information for the specific token.
+              description: Deprecated. Use encryptedToken instead.Unencrypted token value, When
+                this data is used for the inquiry, the response will return information for the specific token.
+              deprecated: true
             encryptedToken:
               type: string
               description: Base64-encoded string of encrypted token PAN (tpan). When
@@ -393,6 +394,7 @@ components:
         token:
           maxLength: 19
           type: string
+          deprecated: true
           description: The token value.
         encryptedToken:
           type: string
@@ -486,7 +488,10 @@ components:
         token:
           maxLength: 19
           type: string
-          description: The token value.
+          description: Deprecated. Use encryptedToken instead.When
+            this data is used for the inquiry, the response will return information for the
+            specific token.
+          deprecated: true
         encryptedToken:
           type: string
           description: Base64-encoded string of encrypted token PAN (tpan).
@@ -540,3 +545,4 @@ components:
       description: Issuer Identifier for the request. Is the same as in the request body.
       schema:
         type: string
+        maxLength: 10
