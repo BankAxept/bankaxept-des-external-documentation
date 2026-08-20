@@ -789,6 +789,10 @@ components:
         |1002|Card expired|
         |1003|Card suspended|
         |1004|Card revoked or deleted|
+        |1005|No eligible card found|
+        |1006|Card not activated|
+        |1007|Wrong OTP|
+        |1008|OTP too many attempts|
         |1009|Invalid change of state|
         |1010|Invalid change of state since the token is deleted|
         |1011|Card already exists in the DES with same PAN, card sequence number and expiry date. Only deleted tokens pointing to the card to be replaced exist in the DES.|
