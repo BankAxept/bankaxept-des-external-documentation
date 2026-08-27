@@ -215,11 +215,13 @@ paths:
          required: true
        responses:
          200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BaseResponse'
+           $ref: '#/components/responses/200Ok'
+         400:
+           $ref: '#/components/responses/400Error'
+         422:
+           $ref: '#/components/responses/422Error'
+         500:
+           $ref: '#/components/responses/500Error'
 components:
   schemas:
     AccountInfo:
@@ -840,3 +842,35 @@ components:
       description: Issuer Identifier for the request. Is the same as in the request body.
       schema:
         type: string
+
+  responses:
+    200Ok:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    422Error:
+      description: The request is not allowed for the current state.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    400Error:
+      description: Client Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    503Error:
+      description: A temporary issue caused the request to not be processed. Retry is possible.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    500Error:
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
