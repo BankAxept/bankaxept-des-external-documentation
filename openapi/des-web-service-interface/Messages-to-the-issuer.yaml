@@ -200,9 +200,9 @@ paths:
      post:
        tags:
          - des-to-issuer
-       summary: Notify token expiry extension
-       description: NotifyTokenExpiryExtension is used by the DES to notify the issuer
-         when a token's expiration date has been extended.
+       summary: Notify token expiry change
+       description: NotifyTokenExpiryChange is used by the DES to notify the issuer
+         when a token's expiration date has been changed.
        operationId: notifyTokenExpiryExtension
        parameters:
          - $ref: '#/components/parameters/IssuerID'
