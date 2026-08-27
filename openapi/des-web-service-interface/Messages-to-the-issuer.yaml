@@ -196,6 +196,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RequestEligibleCardResponse'
+  /expiryUpdateNotification:
+     post:
+       tags:
+         - des-to-issuer
+       summary: Notify token expiry extension
+       description: NotifyTokenExpiryExtension is used by the DES to notify the issuer
+         when a token's expiration date has been extended.
+       operationId: notifyTokenExpiryExtension
+       parameters:
+         - $ref: '#/components/parameters/IssuerID'
+       requestBody:
+         description: Notification for token expiry extension.
+         content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpiryUpdateNotificationRequest'
+         required: true
+       responses:
+         200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
 components:
   schemas:
     AccountInfo:
@@ -578,6 +602,22 @@ components:
               $ref: '#/components/schemas/KeyIndex'
             productId:
               $ref: '#/components/schemas/ProductId'
+    ExpiryUpdateNotificationRequest:
+      allOf:
+        - $ref: '#/components/schemas/BaseRequest'
+        - type: object
+          required:
+            - tokenReferenceId
+            - newExpiryDate
+          properties:
+            tokenReferenceId:
+              $ref: '#/components/schemas/TokenReferenceId'
+            newExpiryDate:
+              maxLength: 4
+              minLength: 4
+              pattern: ^(0[1-9]|1[0-2])(\d{2})$
+              type: string
+              description: The new expiration date of the token, in the format MMYY
     ScoringInformation:
       required:
         - levelOfTrust
