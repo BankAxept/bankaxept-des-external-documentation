@@ -215,8 +215,6 @@ components:
           type: string
           description: The social security number ("fødselsnummer") of the card-holder.
             This could be a D-number.
-    BaseRequest:
-      type: object
     BaseResponse:
       required:
         - responseCode
@@ -289,48 +287,46 @@ components:
         tokenStorageType:
           $ref: '#/components/schemas/TokenStorageType'
     DigitizationCompleteNotification:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - activeTokenCount
-            - decision
-            - issuerCardRefId
-            - issuerId
-            - processId
-            - tokenDetails
-          properties:
-            activeTokenCount:
-              $ref: '#/components/schemas/ActiveTokenCount'
-            decision:
-              type: string
-              description: |-
-                The decision on the initial digitization request.
-                
-                "APPROVE" is used for enrolments that are completed successfully and "DECLINE" is used for all other scenarios.
-              enum:
-                - APPROVE
-                - DECLINE
-            issuerCardRefId:
-              $ref: '#/components/schemas/IssuerCardRefId'
-            issuerId:
-              $ref: '#/components/schemas/IssuerId'
-            paymentAccountReference:
-              $ref: '#/components/schemas/PaymentAccountReference'
-            primaryTokenReferenceId:
-              maxLength: 128
-              type: string
-              description: |-
-                A unique identifier of the primary token provider's token.
-                This parameter is only used for co-badged digitization.
-            processId:
-              $ref: '#/components/schemas/ProcessId'
-            tokenDetails:
-              $ref: '#/components/schemas/TokenDetails'
-            walletCardRefId:
-              $ref: '#/components/schemas/WalletCardRefId'
-            walletVirtualCardId:
-              $ref: '#/components/schemas/WalletVirtualCardId'
+      type: object
+      required:
+        - activeTokenCount
+        - decision
+        - issuerCardRefId
+        - issuerId
+        - processId
+        - tokenDetails
+      properties:
+        activeTokenCount:
+          $ref: '#/components/schemas/ActiveTokenCount'
+        decision:
+          type: string
+          description: |-
+            The decision on the initial digitization request.
+
+            "APPROVE" is used for enrolments that are completed successfully and "DECLINE" is used for all other scenarios.
+          enum:
+            - APPROVE
+            - DECLINE
+        issuerCardRefId:
+          $ref: '#/components/schemas/IssuerCardRefId'
+        issuerId:
+          $ref: '#/components/schemas/IssuerId'
+        paymentAccountReference:
+          $ref: '#/components/schemas/PaymentAccountReference'
+        primaryTokenReferenceId:
+          maxLength: 128
+          type: string
+          description: |-
+            A unique identifier of the primary token provider's token.
+            This parameter is only used for co-badged digitization.
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        tokenDetails:
+          $ref: '#/components/schemas/TokenDetails'
+        walletCardRefId:
+          $ref: '#/components/schemas/WalletCardRefId'
+        walletVirtualCardId:
+          $ref: '#/components/schemas/WalletVirtualCardId'
     EcommerceCertificate:
       required:
         - certificate
@@ -348,99 +344,93 @@ components:
           type: string
           description: The key identifier as provided by ApplePay in hexadecimal format.
     NotifyCardStatusChangeRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - issuerCardRefId
-            - issuerId
-            - processId
-            - tokenStatusUpdateList
-          properties:
-            issuerCardRefId:
-              $ref: '#/components/schemas/IssuerCardRefId'
-            issuerId:
-              $ref: '#/components/schemas/IssuerId'
-            processId:
-              $ref: '#/components/schemas/ProcessId'
-            tokenStatusUpdateList:
-              type: array
-              items:
-                $ref: '#/components/schemas/TokenStatusUpdate'
-            walletCardRefId:
-              $ref: '#/components/schemas/WalletCardRefId'
-            walletVirtualCardId:
-              $ref: '#/components/schemas/WalletVirtualCardId'
+      type: object
+      required:
+        - issuerCardRefId
+        - issuerId
+        - processId
+        - tokenStatusUpdateList
+      properties:
+        issuerCardRefId:
+          $ref: '#/components/schemas/IssuerCardRefId'
+        issuerId:
+          $ref: '#/components/schemas/IssuerId'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        tokenStatusUpdateList:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenStatusUpdate'
+        walletCardRefId:
+          $ref: '#/components/schemas/WalletCardRefId'
+        walletVirtualCardId:
+          $ref: '#/components/schemas/WalletVirtualCardId'
     ProcessCallback:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - processId
-            - responseCode
-            - tokenReferenceId
-            - tokenRequestorId
-          properties:
-            errorMessage:
-              $ref: '#/components/schemas/ErrorMessage'
-            processId:
-              $ref: '#/components/schemas/ProcessId'
-            responseCode:
-              $ref: '#/components/schemas/ResponseCode'
-            status:
-              type: string
-              description: The result of the operation.
-              enum:
-                - suspended
-                - resumed
-                - deleted
-            tokenReferenceId:
-              $ref: '#/components/schemas/TokenReferenceId'
-            tokenRequestorId:
-              $ref: '#/components/schemas/TokenRequestorId'
+      type: object
+      required:
+        - processId
+        - responseCode
+        - tokenReferenceId
+        - tokenRequestorId
+      properties:
+        errorMessage:
+          $ref: '#/components/schemas/ErrorMessage'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        responseCode:
+          $ref: '#/components/schemas/ResponseCode'
+        status:
+          type: string
+          description: The result of the operation.
+          enum:
+            - suspended
+            - resumed
+            - deleted
+        tokenReferenceId:
+          $ref: '#/components/schemas/TokenReferenceId'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
     RequestCardDigitizationRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - activeTokenCount
-            - issuerCardRefId
-            - issuerId
-            - keyIndex
-            - processId
-            - tokenRequestorId
-            - tokenType
-          properties:
-            activeTokenCount:
-              $ref: '#/components/schemas/ActiveTokenCount'
-            deviceInformation:
-              $ref: '#/components/schemas/DeviceInformation'
-            encryptedCardInfo:
-              $ref: '#/components/schemas/EncryptedCardInfo'
-            issuerCardRefId:
-              $ref: '#/components/schemas/IssuerCardRefId'
-            issuerId:
-              $ref: '#/components/schemas/IssuerId'
-            keyIndex:
-              $ref: '#/components/schemas/KeyIndex'
-            paymentAccountReference:
-              $ref: '#/components/schemas/PaymentAccountReference'
-            processId:
-              $ref: '#/components/schemas/ProcessId'
-            riskScore:
-              maximum: 99
-              minimum: 0
-              type: integer
-              description: BankAxept-generated risk score based on BankAxept proprietary
-                risk engine. The value ranges from 0 - 99, with 0 being the lowest risk
-                and 99 being the highest risk.
-              format: int32
-            scoringInformation:
-              $ref: '#/components/schemas/ScoringInformation'
-            tokenRequestorId:
-              $ref: '#/components/schemas/TokenRequestorId'
-            tokenType:
-              $ref: '#/components/schemas/TokenType'
+      type: object
+      required:
+        - activeTokenCount
+        - issuerCardRefId
+        - issuerId
+        - keyIndex
+        - processId
+        - tokenRequestorId
+        - tokenType
+      properties:
+        activeTokenCount:
+          $ref: '#/components/schemas/ActiveTokenCount'
+        deviceInformation:
+          $ref: '#/components/schemas/DeviceInformation'
+        encryptedCardInfo:
+          $ref: '#/components/schemas/EncryptedCardInfo'
+        issuerCardRefId:
+          $ref: '#/components/schemas/IssuerCardRefId'
+        issuerId:
+          $ref: '#/components/schemas/IssuerId'
+        keyIndex:
+          $ref: '#/components/schemas/KeyIndex'
+        paymentAccountReference:
+          $ref: '#/components/schemas/PaymentAccountReference'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        riskScore:
+          maximum: 99
+          minimum: 0
+          type: integer
+          description: BankAxept-generated risk score based on BankAxept proprietary
+            risk engine. The value ranges from 0 - 99, with 0 being the lowest risk
+            and 99 being the highest risk.
+          format: int32
+        scoringInformation:
+          $ref: '#/components/schemas/ScoringInformation'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
+        tokenType:
+          $ref: '#/components/schemas/TokenType'
     RequestCardDigitizationResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -457,45 +447,43 @@ components:
             serviceCode:
               $ref: '#/components/schemas/ServiceCode'
     RequestCoBadgeDigitizationRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - encryptedCardInfo
-            - encryptionOrigin
-            - issuerId
-            - keyIndex
-            - processId
-            - tokenRequestorId
-            - tokenStorageId
-            - tokenType
-            - TokenStorageType
-            - walletCardRefId
-          properties:
-            activeTokenCount:
-              $ref: '#/components/schemas/ActiveTokenCount'
-            encryptedCardInfo:
-              $ref: '#/components/schemas/EncryptedCardInfo'
-            encryptionOrigin:
-              $ref: '#/components/schemas/EncryptionOrigin'
-            issuerCardRefId:
-              $ref: '#/components/schemas/IssuerCardRefId'
-            issuerId:
-              $ref: '#/components/schemas/IssuerId'
-            keyIndex:
-              $ref: '#/components/schemas/KeyIndex'
-            processId:
-              $ref: '#/components/schemas/ProcessId'
-            tokenStorageId:
-              $ref: '#/components/schemas/TokenStorageId'
-            TokenStorageType:
-              $ref: '#/components/schemas/TokenStorageType'
-            tokenRequestorId:
-              $ref: '#/components/schemas/TokenRequestorId'
-            tokenType:
-              $ref: '#/components/schemas/TokenType'
-            walletCardRefId:
-              $ref: '#/components/schemas/WalletCardRefId'
+      type: object
+      required:
+        - encryptedCardInfo
+        - encryptionOrigin
+        - issuerId
+        - keyIndex
+        - processId
+        - tokenRequestorId
+        - tokenStorageId
+        - tokenType
+        - TokenStorageType
+        - walletCardRefId
+      properties:
+        activeTokenCount:
+          $ref: '#/components/schemas/ActiveTokenCount'
+        encryptedCardInfo:
+          $ref: '#/components/schemas/EncryptedCardInfo'
+        encryptionOrigin:
+          $ref: '#/components/schemas/EncryptionOrigin'
+        issuerCardRefId:
+          $ref: '#/components/schemas/IssuerCardRefId'
+        issuerId:
+          $ref: '#/components/schemas/IssuerId'
+        keyIndex:
+          $ref: '#/components/schemas/KeyIndex'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        tokenStorageId:
+          $ref: '#/components/schemas/TokenStorageId'
+        TokenStorageType:
+          $ref: '#/components/schemas/TokenStorageType'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
+        tokenType:
+          $ref: '#/components/schemas/TokenType'
+        walletCardRefId:
+          $ref: '#/components/schemas/WalletCardRefId'
     RequestCoBadgeDigitizationResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -508,63 +496,59 @@ components:
             serviceCode:
               $ref: '#/components/schemas/ServiceCode'
     RequestCoBadgeDigitizationByTokenRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - encryptedTokenInfo
-            - encryptionOrigin
-            - keyIndex
-            - processId
-            - tokenRequestorId
-            - tokenStorageId
-            - tokenType
-            - tokenStorageType
-            - walletCardRefId
-          properties:
-            encryptedTokenInfo:
-              $ref: '#/components/schemas/EncryptedTokenInfo'
-            encryptionOrigin:
-              $ref: '#/components/schemas/EncryptionOrigin'
-            keyIndex:
-              $ref: '#/components/schemas/KeyIndex'
-            processId:
-              $ref: '#/components/schemas/ProcessId'
-            tokenStorageId:
-              $ref: '#/components/schemas/TokenStorageId'
-            tokenStorageType:
-              $ref: '#/components/schemas/TokenStorageType'
-            tokenRequestorId:
-              $ref: '#/components/schemas/TokenRequestorId'
-            tokenType:
-              $ref: '#/components/schemas/TokenType'
-            walletCardRefId:
-              $ref: '#/components/schemas/WalletCardRefId'
+      type: object
+      required:
+        - encryptedTokenInfo
+        - encryptionOrigin
+        - keyIndex
+        - processId
+        - tokenRequestorId
+        - tokenStorageId
+        - tokenType
+        - tokenStorageType
+        - walletCardRefId
+      properties:
+        encryptedTokenInfo:
+          $ref: '#/components/schemas/EncryptedTokenInfo'
+        encryptionOrigin:
+          $ref: '#/components/schemas/EncryptionOrigin'
+        keyIndex:
+          $ref: '#/components/schemas/KeyIndex'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        tokenStorageId:
+          $ref: '#/components/schemas/TokenStorageId'
+        tokenStorageType:
+          $ref: '#/components/schemas/TokenStorageType'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
+        tokenType:
+          $ref: '#/components/schemas/TokenType'
+        walletCardRefId:
+          $ref: '#/components/schemas/WalletCardRefId'
     RequestEligibleCardRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - encryptedAccountInfo
-            - issuerId
-            - keyIndex
-            - processId
-            - tokenRequestorId
-            - tokenType
-          properties:
-            encryptedAccountInfo:
-              type: string
-              description: Base64-encoded string of encrypted accountInfo.
-            issuerId:
-              $ref: '#/components/schemas/IssuerId'
-            keyIndex:
-              $ref: '#/components/schemas/KeyIndex'
-            processId:
-              $ref: '#/components/schemas/ProcessId'
-            tokenRequestorId:
-              $ref: '#/components/schemas/TokenRequestorId'
-            tokenType:
-              $ref: '#/components/schemas/TokenType'
+      type: object
+      required:
+        - encryptedAccountInfo
+        - issuerId
+        - keyIndex
+        - processId
+        - tokenRequestorId
+        - tokenType
+      properties:
+        encryptedAccountInfo:
+          type: string
+          description: Base64-encoded string of encrypted accountInfo.
+        issuerId:
+          $ref: '#/components/schemas/IssuerId'
+        keyIndex:
+          $ref: '#/components/schemas/KeyIndex'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
+        tokenType:
+          $ref: '#/components/schemas/TokenType'
     RequestEligibleCardResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
