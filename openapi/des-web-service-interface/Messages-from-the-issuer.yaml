@@ -148,8 +148,6 @@ paths:
       x-codegen-request-body-name: body
 components:
   schemas:
-    BaseRequest:
-      type: object
     BaseResponse:
       type: object
       required:
@@ -215,49 +213,47 @@ components:
           items:
             $ref: '#/components/schemas/TokenDetails'
     InquiryRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - issuerId
-          properties:
-            encryptedCardPan:
-              type: string
-              description: Base64-encoded string of encrypted funding PAN (fpan). When
-                this data presents, the response will return all tokens associated to
-                this fpan.
-            issuerCardRefId:
-              maxLength: 48
-              type: string
-              description: A unique identifier for a BankAxept card instance.
-            issuerId:
-              maxLength: 10
-              type: string
-              description: Unique identifier of the issuer.
-            keyIndex:
-              maxLength: 500
-              type: string
-              description: An identifier of the key (the fingerprint of the certificate)
-                used to encrypt data between the DES and the Issuer.
-            token:
-              maxLength: 19
-              type: string
-              description: Deprecated. Use encryptedToken instead.Unencrypted token value, When
-                this data is used for the inquiry, the response will return information for the specific token.
-              deprecated: true
-            encryptedToken:
-              type: string
-              description: Base64-encoded string of encrypted token PAN (tpan). When
-                this data is used for the inquiry, the response will return information for the
-                specific token.
-            tokenReferenceId:
-              maxLength: 32
-              type: string
-              description: A unique identifier of the token.
-            tokenRequestorId:
-              maxLength: 11
-              type: string
-              description: A unique identifier of the token requestor.
+      type: object
+      required:
+        - issuerId
+      properties:
+        encryptedCardPan:
+          type: string
+          description: Base64-encoded string of encrypted funding PAN (fpan). When
+            this data presents, the response will return all tokens associated to
+            this fpan.
+        issuerCardRefId:
+          maxLength: 48
+          type: string
+          description: A unique identifier for a BankAxept card instance.
+        issuerId:
+          maxLength: 10
+          type: string
+          description: Unique identifier of the issuer.
+        keyIndex:
+          maxLength: 500
+          type: string
+          description: An identifier of the key (the fingerprint of the certificate)
+            used to encrypt data between the DES and the Issuer.
+        token:
+          maxLength: 19
+          type: string
+          description: Deprecated. Use encryptedToken instead.Unencrypted token value, When
+            this data is used for the inquiry, the response will return information for the specific token.
+          deprecated: true
+        encryptedToken:
+          type: string
+          description: Base64-encoded string of encrypted token PAN (tpan). When
+            this data is used for the inquiry, the response will return information for the
+            specific token.
+        tokenReferenceId:
+          maxLength: 32
+          type: string
+          description: A unique identifier of the token.
+        tokenRequestorId:
+          maxLength: 11
+          type: string
+          description: A unique identifier of the token requestor.
     InquiryResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -294,41 +290,39 @@ components:
           type: string
           description: The new card sequence number.
     ReplaceCardRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - issuerId
-            - keyIndex
-          properties:
-            issuerId:
-              maxLength: 10
-              type: string
-              description: Unique identifier of the issuer.
-            keyIndex:
-              maxLength: 500
-              type: string
-              description: An identifier of the key (the fingerprint of the certificate)
-                used to encrypt data between the DES and the Issuer.
-            replaceCardDetails:
-              description: Details of the card to be replaced and the new card information.
-              $ref: '#/components/schemas/ReplaceCardDetails'
-            replaceCardDetailsList:
-              deprecated: true
-              maxItems: 99
-              type: array
-              description: >
-                **Deprecated** — use `replaceCardDetails` instead.
-                Details of the card to be replaced and the new card information.
-                If more than one card is to be replaced (batch replacement), one record
-                per card must be provided.
-              items:
-                $ref: '#/components/schemas/ReplaceCardDetails'
-        - oneOf:
-            - required:
-                - replaceCardDetails
-            - required:
-                - replaceCardDetailsList
+      type: object
+      required:
+        - issuerId
+        - keyIndex
+      properties:
+        issuerId:
+          maxLength: 10
+          type: string
+          description: Unique identifier of the issuer.
+        keyIndex:
+          maxLength: 500
+          type: string
+          description: An identifier of the key (the fingerprint of the certificate)
+            used to encrypt data between the DES and the Issuer.
+        replaceCardDetails:
+          description: Details of the card to be replaced and the new card information.
+          $ref: '#/components/schemas/ReplaceCardDetails'
+        replaceCardDetailsList:
+          deprecated: true
+          maxItems: 99
+          type: array
+          description: >
+            **Deprecated** — use `replaceCardDetails` instead.
+            Details of the card to be replaced and the new card information.
+            If more than one card is to be replaced (batch replacement), one record
+            per card must be provided.
+          items:
+            $ref: '#/components/schemas/ReplaceCardDetails'
+      oneOf:
+        - required:
+            - replaceCardDetails
+        - required:
+            - replaceCardDetailsList
     ReplaceCardResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -504,33 +498,31 @@ components:
           type: string
           description: A unique identifier of the token requestor.
     UpdateCardStateRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - issuerId
-          properties:
-            issuerId:
-              maxLength: 10
-              type: string
-              description: Unique identifier of the issuer.
-            updateCardDetails:
-              description: Details of the card to be updated.
-              $ref: '#/components/schemas/UpdateCardDetails'
-            updateCardDetailsList:
-              deprecated: true
-              maxItems: 99
-              type: array
-              description: >
-                **Deprecated** — use `UpdateCardDetails` instead.
-                List of UpdateCardDetails records.
-              items:
-                $ref: '#/components/schemas/UpdateCardDetails'
-        - oneOf:
-            - required:
-                - updateCardDetails
-            - required:
-                - updateCardDetailsList
+      type: object
+      required:
+        - issuerId
+      properties:
+        issuerId:
+          maxLength: 10
+          type: string
+          description: Unique identifier of the issuer.
+        updateCardDetails:
+          description: Details of the card to be updated.
+          $ref: '#/components/schemas/UpdateCardDetails'
+        updateCardDetailsList:
+          deprecated: true
+          maxItems: 99
+          type: array
+          description: >
+            **Deprecated** — use `UpdateCardDetails` instead.
+            List of UpdateCardDetails records.
+          items:
+            $ref: '#/components/schemas/UpdateCardDetails'
+      oneOf:
+        - required:
+            - updateCardDetails
+        - required:
+            - updateCardDetailsList
     UpdateCardStateResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
