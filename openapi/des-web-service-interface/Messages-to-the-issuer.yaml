@@ -261,11 +261,7 @@ components:
           description: Depending on the Wallet provider, this value may or may not
             be provided. In the case of InApp enrolment, this data field is not present.
         exp:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: The expiry date in the format MMYY.
+          $ref: '#/components/schemas/MonthYearDate'
         fpan:
           maxLength: 19
           type: string
@@ -587,21 +583,14 @@ components:
             productId:
               $ref: '#/components/schemas/ProductId'
     ExpiryUpdateNotificationRequest:
-      allOf:
-        - $ref: '#/components/schemas/BaseRequest'
-        - type: object
-          required:
-            - tokenReferenceId
-            - newExpiryDate
-          properties:
-            tokenReferenceId:
-              $ref: '#/components/schemas/TokenReferenceId'
-            newExpiryDate:
-              maxLength: 4
-              minLength: 4
-              pattern: ^(0[1-9]|1[0-2])(\d{2})$
-              type: string
-              description: The new expiration date of the token, in the format MMYY
+        required:
+          - tokenReferenceId
+          - newExpiryDate
+        properties:
+          tokenReferenceId:
+            $ref: '#/components/schemas/TokenReferenceId'
+          newExpiryDate:
+            $ref: '#/components/schemas/MonthYearDate'
     ScoringInformation:
       required:
         - levelOfTrust
@@ -639,11 +628,7 @@ components:
 
             The field is Conditional and only applicable if the token has been activated.
         tokenExpiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: Expiration date of the token, in the format MMYY
+          $ref: '#/components/schemas/MonthYearDate'
         tokenReferenceId:
           $ref: '#/components/schemas/TokenReferenceId'
         tokenRequestorId:
@@ -842,6 +827,12 @@ components:
       maxLength: 128
       type: string
       description: A unique device identifier.
+    MonthYearDate:
+      maxLength: 4
+      minLength: 4
+      pattern: ^(0[1-9]|1[0-2])(\d{2})$
+      type: string
+      description: The new expiration date of the token, in the format MMYY
   parameters:
     IssuerID:
       name: issuer-id

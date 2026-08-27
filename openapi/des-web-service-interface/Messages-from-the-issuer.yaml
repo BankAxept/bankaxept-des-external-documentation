@@ -180,6 +180,12 @@ components:
             - WATCH
             - COMPUTER
             - UNKNOWN
+    MonthYearDate:
+      maxLength: 4
+      minLength: 4
+      pattern: ^(0[1-9]|1[0-2])(\d{2})$
+      type: string
+      description: Date in the format MMYY.
     HealthCheckResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -198,11 +204,7 @@ components:
           type: string
           description: Last four digits of the card fpan.
         expiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: Expiry date of the fpan.
+          $ref: '#/components/schemas/MonthYearDate'
         panSequenceNumber:
           pattern: ^0\d{2}$
           type: string
@@ -279,12 +281,7 @@ components:
           type: string
           description: A unique identifier for a BankAxept card instance.
         newCardExpiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: The new card expiry date (either for the original or the new
-            PAN) in the format MMYY.
+          $ref: '#/components/schemas/MonthYearDate'
         newCardSequenceNumber:
           pattern: ^0\d{2}$
           type: string
@@ -305,7 +302,6 @@ components:
           description: An identifier of the key (the fingerprint of the certificate)
             used to encrypt data between the DES and the Issuer.
         replaceCardDetails:
-          description: Details of the card to be replaced and the new card information.
           $ref: '#/components/schemas/ReplaceCardDetails'
         replaceCardDetailsList:
           deprecated: true
@@ -329,7 +325,6 @@ components:
         - type: object
           properties:
             responseDetailsLcm:
-              description: Result of the replacement action for a single card.
               $ref: '#/components/schemas/ResponseDetailsLcm'
             responseDetailsLcmList:
               deprecated: true
@@ -401,11 +396,7 @@ components:
             is according to ISO 8601. YYYY-MM-DDThh:mm:ss  The field is Conditional
             and only applicable if the token has been activated.
         tokenExpiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: Expiration date of the token formatted as MMYY.
+          $ref: '#/components/schemas/MonthYearDate'
         tokenReferenceId:
           maxLength: 32
           type: string
@@ -507,7 +498,6 @@ components:
           type: string
           description: Unique identifier of the issuer.
         updateCardDetails:
-          description: Details of the card to be updated.
           $ref: '#/components/schemas/UpdateCardDetails'
         updateCardDetailsList:
           deprecated: true
@@ -531,7 +521,6 @@ components:
             - processId
           properties:
             responseDetailsLcm:
-              description: Result of the update card action for a single card.
               $ref: '#/components/schemas/ResponseDetailsLcm'
             responseDetailsLcmList:
               deprecated: true
