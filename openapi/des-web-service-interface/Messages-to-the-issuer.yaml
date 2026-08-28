@@ -263,7 +263,7 @@ components:
           description: Depending on the Wallet provider, this value may or may not
             be provided. In the case of InApp enrolment, this data field is not present.
         exp:
-          $ref: '#/components/schemas/MonthYearDate'
+          $ref: '#/components/schemas/Expiry'
         fpan:
           maxLength: 19
           type: string
@@ -592,7 +592,7 @@ components:
         tokenReferenceId:
           $ref: '#/components/schemas/TokenReferenceId'
         newExpiryDate:
-          $ref: '#/components/schemas/MonthYearDate'
+          $ref: '#/components/schemas/Expiry'
     ScoringInformation:
       required:
         - levelOfTrust
@@ -630,7 +630,7 @@ components:
             
             The field is Conditional and only applicable if the token has been activated.
         tokenExpiryDate:
-          $ref: '#/components/schemas/MonthYearDate'
+          $ref: '#/components/schemas/Expiry'
         tokenReferenceId:
           $ref: '#/components/schemas/TokenReferenceId'
         tokenRequestorId:
@@ -829,12 +829,12 @@ components:
       maxLength: 128
       type: string
       description: A unique device identifier.
-    MonthYearDate:
+    Expiry:
       maxLength: 4
       minLength: 4
       pattern: ^(0[1-9]|1[0-2])(\d{2})$
       type: string
-      description: The new expiration date of the token, in the format MMYY
+      description: Expiry date in MMYY format
   parameters:
     IssuerID:
       name: issuer-id
@@ -851,7 +851,7 @@ components:
           schema:
             $ref: '#/components/schemas/BaseResponse'
     422Error:
-      description: The request is not allowed for the current state.
+      description: The syntax is correct, but the content is invalid.
       content:
         application/json:
           schema:

@@ -180,12 +180,12 @@ components:
             - WATCH
             - COMPUTER
             - UNKNOWN
-    MonthYearDate:
+    Expiry:
       maxLength: 4
       minLength: 4
       pattern: ^(0[1-9]|1[0-2])(\d{2})$
       type: string
-      description: Date in the format MMYY.
+      description: Expiry date in MMYY format
     HealthCheckResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -204,7 +204,7 @@ components:
           type: string
           description: Last four digits of the card fpan.
         expiryDate:
-          $ref: '#/components/schemas/MonthYearDate'
+          $ref: '#/components/schemas/Expiry'
         panSequenceNumber:
           pattern: ^0\d{2}$
           type: string
@@ -281,7 +281,7 @@ components:
           type: string
           description: A unique identifier for a BankAxept card instance.
         newCardExpiryDate:
-          $ref: '#/components/schemas/MonthYearDate'
+          $ref: '#/components/schemas/Expiry'
         newCardSequenceNumber:
           pattern: ^0\d{2}$
           type: string
@@ -396,7 +396,7 @@ components:
             is according to ISO 8601. YYYY-MM-DDThh:mm:ss  The field is Conditional
             and only applicable if the token has been activated.
         tokenExpiryDate:
-          $ref: '#/components/schemas/MonthYearDate'
+          $ref: '#/components/schemas/Expiry'
         tokenReferenceId:
           maxLength: 32
           type: string
