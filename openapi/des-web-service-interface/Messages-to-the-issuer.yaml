@@ -99,12 +99,12 @@ paths:
         - des-to-issuer
       summary: Request card digitization
       description: |-
-        The DES uses this method to prompt an issuer to authorise a card digitization request. This method provides information about:
-        *  The card and the card capture method, e.g. photo, manual entry or issuer app.
-        *  User accepts or declines of Terms and Conditions.
-        *  Risk scoring and a recommendation made by the Wallet Provider.
-        *  Device and wallet information.
-
+        The DES uses this method to prompt an issuer to authorise a card digitization request. This method provides information about:  
+        *  The card and the card capture method, e.g. photo, manual entry or issuer app.  
+        *  User accepts or declines of Terms and Conditions.  
+        *  Risk scoring and a recommendation made by the Wallet Provider.  
+        *  Device and wallet information.  
+        
         The issuer then must decide whether to approve or decline the digitization of the card.
       operationId: requestCardDigitization
       parameters:
@@ -196,6 +196,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RequestEligibleCardResponse'
+  /expiryUpdateNotification:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Notify token expiry change
+      description: NotifyTokenExpiryChange is used by the DES to notify the issuer
+        when a token's expiration date has been changed.
+      operationId: notifyTokenExpiryExtension
+      parameters:
+        - $ref: '#/components/parameters/IssuerID'
+      requestBody:
+        description: Notification for token expiry extension.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpiryUpdateNotificationRequest'
+        required: true
+      responses:
+        200:
+          $ref: '#/components/responses/200Ok'
+        400:
+          $ref: '#/components/responses/400Error'
+        422:
+          $ref: '#/components/responses/422Error'
+        500:
+          $ref: '#/components/responses/500Error'
 components:
   schemas:
     AccountInfo:
@@ -237,11 +263,7 @@ components:
           description: Depending on the Wallet provider, this value may or may not
             be provided. In the case of InApp enrolment, this data field is not present.
         exp:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: The expiry date in the format MMYY.
+          $ref: '#/components/schemas/Expiry'
         fpan:
           maxLength: 19
           type: string
@@ -301,8 +323,8 @@ components:
         decision:
           type: string
           description: |-
-            The decision on the initial digitization request.
-
+            The decision on the initial digitization request.  
+            
             "APPROVE" is used for enrolments that are completed successfully and "DECLINE" is used for all other scenarios.
           enum:
             - APPROVE
@@ -317,7 +339,7 @@ components:
           maxLength: 128
           type: string
           description: |-
-            A unique identifier of the primary token provider's token.
+            A unique identifier of the primary token provider's token.  
             This parameter is only used for co-badged digitization.
         processId:
           $ref: '#/components/schemas/ProcessId'
@@ -562,6 +584,15 @@ components:
               $ref: '#/components/schemas/KeyIndex'
             productId:
               $ref: '#/components/schemas/ProductId'
+    ExpiryUpdateNotificationRequest:
+      required:
+        - tokenReferenceId
+        - newExpiryDate
+      properties:
+        tokenReferenceId:
+          $ref: '#/components/schemas/TokenReferenceId'
+        newExpiryDate:
+          $ref: '#/components/schemas/Expiry'
     ScoringInformation:
       required:
         - levelOfTrust
@@ -595,15 +626,11 @@ components:
           minLength: 19
           type: string
           description: |-
-            The exact date and time when the token is activated. The format is according to ISO 8601. YYYY-MM-DDThh:mm:ss
-
+            The exact date and time when the token is activated. The format is according to ISO 8601. YYYY-MM-DDThh:mm:ss  
+            
             The field is Conditional and only applicable if the token has been activated.
         tokenExpiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: Expiration date of the token, in the format MMYY
+          $ref: '#/components/schemas/Expiry'
         tokenReferenceId:
           $ref: '#/components/schemas/TokenReferenceId'
         tokenRequestorId:
@@ -642,10 +669,10 @@ components:
     TokenType:
       type: string
       description: |-
-        "EMBEDDED_SE" used for international wallets based on Secure Element (SE).
-
-        "HCE" used for international wallets based on Host Card Emulation (HCE).
-
+        "EMBEDDED_SE" used for international wallets based on Secure Element (SE).  
+        
+        "HCE" used for international wallets based on Host Card Emulation (HCE).  
+        
         "CARD_ON_FILE" used for ePayment.
       enum:
         - EMBEDDED_SE
@@ -658,8 +685,8 @@ components:
     TokenStatus:
       type: string
       description: |-
-        "ACTIVE" or "SUSPENDED" or "DELETED"
-
+        "ACTIVE" or "SUSPENDED" or "DELETED"  
+        
         Note: When the DES gets a "DELETED" status while provisioning the card, it is passed on to the Issuer. The Issuer needs the information for tracking purposes.
       enum:
         - ACTIVE
@@ -726,69 +753,69 @@ components:
       maxLength: 128
       type: string
       description: |-
-        Card unique identifier defined by the Wallet Provider or the primary TSP.
-
+        Card unique identifier defined by the Wallet Provider or the primary TSP.  
+        
         For ApplePay, it corresponds to the FPANID.
     WalletVirtualCardId:
       maxLength: 128
       type: string
       description: |-
-        Wallet virtual card identifier. 
-
+        Wallet virtual card identifier.   
+        
         For ApplePay, it corresponds to the auxiliary DPANID.
     IssuerCardRefId:
       maxLength: 48
       type: string
       description: |-
-        A unique identifier for a BankAxept card instance.
+        A unique identifier for a BankAxept card instance.  
         
         issuerCardRefId parameter will only have a value in the easy provisioning use case.
     PaymentAccountReference:
       maxLength: 29
       type: string
       description: |-
-        Payment Account Reference to identify the account of the cardholder.
+        Payment Account Reference to identify the account of the cardholder.  
         
         *Note: The issuer may not receive this data in the early release but should be prepared to receive it when it is available.*
     ResponseCode:
       type: integer
       format: int32
       description: |
-        |Response code | Description|
-        |-------|-------|
-        |0|Success|
-        |<b>100-999</b>|<b>Wallet-related error codes</b>|
-        |113|Unknown issuer|
-        |115|Unknown product|          
-        |116|Unknown card (service code unknown etc.)|
-        |119|Unknown virtual card|
-        |221|Device or Wallet Provider not accessible after retries|
-        |322|Time to live of the operation expired|
-        |911|Operation failed|
-        |921|Unexpected server error|
-        |||
-        ||<b>Functional</b>|
-        |1000|Not found|
-        |1001|Illegal operation|
-        |1002|Card expired|
-        |1003|Card suspended|
-        |1004|Card revoked or deleted|
-        |1005|No eligible card found|
-        |1006|Card not activated|
-        |1007|Wrong OTP|
-        |1008|OTP too many attempts|
-        |1009|Invalid change of state|
-        |1010|Invalid change of state since the token is deleted|
-        |1011|Card already exists in the DES with same PAN, card sequence number and expiry date. Only deleted tokens pointing to the card to be replaced exist in the DES.|
-        |1012|Card already exists in the DES with same PAN, card sequence number and expiry date. Active or suspended tokens pointing to the card to be replaced exist in the DES.|
-        |1013|Card already exists in the DES with the same PAN, card sequence number but different expiry date.|
-        |||
-        ||<b>Format errors</b>|
-        |2000|Missing parameter|
-        |2001|Invalid format|
-        |||
-        ||<b>System errors</b>|
-        |3000|Internal error (Server error)|
+        |Response code | Description|  
+        |-------|-------|  
+        |0|Success|  
+        |<b>100-999</b>|<b>Wallet-related error codes</b>|  
+        |113|Unknown issuer|  
+        |115|Unknown product|            
+        |116|Unknown card (service code unknown etc.)|  
+        |119|Unknown virtual card|  
+        |221|Device or Wallet Provider not accessible after retries|  
+        |322|Time to live of the operation expired|  
+        |911|Operation failed|  
+        |921|Unexpected server error|  
+        |||  
+        ||<b>Functional</b>|  
+        |1000|Not found|  
+        |1001|Illegal operation|  
+        |1002|Card expired|  
+        |1003|Card suspended|  
+        |1004|Card revoked or deleted|  
+        |1005|No eligible card found|  
+        |1006|Card not activated|  
+        |1007|Wrong OTP|  
+        |1008|OTP too many attempts|  
+        |1009|Invalid change of state|  
+        |1010|Invalid change of state since the token is deleted|  
+        |1011|Card already exists in the DES with same PAN, card sequence number and expiry date. Only deleted tokens pointing to the card to be replaced exist in the DES.|  
+        |1012|Card already exists in the DES with same PAN, card sequence number and expiry date. Active or suspended tokens pointing to the card to be replaced exist in the DES.|  
+        |1013|Card already exists in the DES with the same PAN, card sequence number but different expiry date.|  
+        |||  
+        ||<b>Format errors</b>|  
+        |2000|Missing parameter|  
+        |2001|Invalid format|  
+        |||  
+        ||<b>System errors</b>|  
+        |3000|Internal error (Server error)|  
         |3001|Internal error (General error)|
     ErrorMessage:
       maxLength: 500
@@ -802,6 +829,12 @@ components:
       maxLength: 128
       type: string
       description: A unique device identifier.
+    Expiry:
+      maxLength: 4
+      minLength: 4
+      pattern: ^(0[1-9]|1[0-2])(\d{2})$
+      type: string
+      description: Expiry date in MMYY format
   parameters:
     IssuerID:
       name: issuer-id
@@ -809,3 +842,35 @@ components:
       description: Issuer Identifier for the request. Is the same as in the request body.
       schema:
         type: string
+
+  responses:
+    200Ok:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    422Error:
+      description: The syntax is correct, but the content is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    400Error:
+      description: Client Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    503Error:
+      description: A temporary issue caused the request to not be processed. Retry is possible.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+    500Error:
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'

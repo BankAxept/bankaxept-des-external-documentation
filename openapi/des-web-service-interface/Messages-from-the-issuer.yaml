@@ -34,12 +34,12 @@ paths:
         - issuer-to-des
       summary: Token information inquiry
       description: |-
-        The Inquiry API call provides the issuer with the ability to search for token-related information. BankAxept supports inquiry calls with different inputs:
-        *  **Search by the primary account number (PAN)**: the response provides information for all tokens associated with the PAN.
-        *  **Search by the token**: the response provides information on the specific token.
-        *  **Search by tokenReferenceId and tokenRequestorId**: the response provides information of the token associated with the combination of the tokenReferenceId and tokenRequestorId.
-        *  **Search by the issuerCardRefId**: the response provides information for all tokens associated with the card instance.
-
+        The Inquiry API call provides the issuer with the ability to search for token-related information. BankAxept supports inquiry calls with different inputs:  
+        *  **Search by the primary account number (PAN)**: the response provides information for all tokens associated with the PAN.  
+        *  **Search by the token**: the response provides information on the specific token.  
+        *  **Search by tokenReferenceId and tokenRequestorId**: the response provides information of the token associated with the combination of the tokenReferenceId and tokenRequestorId.  
+        *  **Search by the issuerCardRefId**: the response provides information for all tokens associated with the card instance.  
+        
         *If tokenReferenceId is used for the inquiry, tokenRequestorId must also be included, and vice versa.*
       operationId: inquiry
       parameters:
@@ -70,15 +70,15 @@ paths:
         - issuer-to-des
       summary: Replace funding card details
       description: |-
-        The ReplaceCard API call is used by the issuer to update card PAN mapping information or the issuer product configuration ID for all tokens that are associated to a PAN. The fpan must be the same since otherwise the PAR will not be correctly linked.
-        The allowed options for replacing card details are:
-        * fpan (must be the same), Expiry date, PSN, Product Id.
-        * fpan (must be the same), Expiry date, PSN.
-        * Product Id.
-
-        The DES also supports batch card replacement via this API. In such case, the replaceCardDetailsList can contain up to 99 individual records.
-        **Note:** `replaceCardDetailsList` is deprecated — use `replaceCardDetails` for new integrations.
-
+        The ReplaceCard API call is used by the issuer to update card PAN mapping information or the issuer product configuration ID for all tokens that are associated to a PAN. The fpan must be the same since otherwise the PAR will not be correctly linked.  
+        The allowed options for replacing card details are:  
+        * fpan (must be the same), Expiry date, PSN, Product Id.  
+        * fpan (must be the same), Expiry date, PSN.  
+        * Product Id.  
+        
+        The DES also supports batch card replacement via this API. In such case, the replaceCardDetailsList can contain up to 99 individual records.  
+        **Note:** `replaceCardDetailsList` is deprecated — use `replaceCardDetails` for new integrations.  
+        
         *encryptedNewCardPan field containing a Base64-encoded encrypted newCardPan. The issuer will receive from BankAxept the certificate to be used when encrypting the data to BankAxept.*
       operationId: replaceCard
       parameters:
@@ -109,19 +109,19 @@ paths:
         - issuer-to-des
       summary: Request token status update
       description: |-
-        UpdateCardState is used by the issuer to request the DES to make a change to the token status. The change can be made on all tokens associated with the same PAN at once, or only on a specific token depending on the input data.
-
-        **Note:** When a PAN is suspended (issuerCardRefId), all tokens associated to the PAN are suspended. To resume tokens, the request needs to specify the specific token (tokenReferenceId and token-RequestorId or token).
-
-        The DES also supports batch card state updates via this API. In such a case, the updateCardDe-tailsList can contain up to 99 individual records.
-
-        BankAxept supports UpdateCardState calls with different inputs:
-        *  **Update by token**: the response provides information on the updated token.
-        *  **Update by tokenReferenceId and tokenRequestorId**: the response provides information on the updated token associated with the combination of the tokenReferenceId and token-RequestorId.
-        *  **Update by the issuerCardRefId**: the response provides information for all updated tokens associated with the card instance. Note: Update by the issuerCardRefId does not apply for resume.
-
-        If no token information is included, all the tokens associated with the card will be updated. If either (token) or (tokenRequestorId and tokenReferenceId) is included, only the specific token will be updated.
-
+        UpdateCardState is used by the issuer to request the DES to make a change to the token status. The change can be made on all tokens associated with the same PAN at once, or only on a specific token depending on the input data.  
+        
+        **Note:** When a PAN is suspended (issuerCardRefId), all tokens associated to the PAN are suspended. To resume tokens, the request needs to specify the specific token (tokenReferenceId and token-RequestorId or token).  
+        
+        The DES also supports batch card state updates via this API. In such a case, the updateCardDe-tailsList can contain up to 99 individual records.  
+        
+        BankAxept supports UpdateCardState calls with different inputs:  
+        *  **Update by token**: the response provides information on the updated token.  
+        *  **Update by tokenReferenceId and tokenRequestorId**: the response provides information on the updated token associated with the combination of the tokenReferenceId and token-RequestorId.  
+        *  **Update by the issuerCardRefId**: the response provides information for all updated tokens associated with the card instance. Note: Update by the issuerCardRefId does not apply for resume.  
+        
+        If no token information is included, all the tokens associated with the card will be updated. If either (token) or (tokenRequestorId and tokenReferenceId) is included, only the specific token will be updated.  
+        
         **Note**: When a PAN is suspended (issuerCardRefId), all tokens associated to the PAN are suspended. To resume tokens the request needs to specify the specific token (tokenReferenceId).
       operationId: updateCardState
       parameters:
@@ -180,6 +180,12 @@ components:
             - WATCH
             - COMPUTER
             - UNKNOWN
+    Expiry:
+      maxLength: 4
+      minLength: 4
+      pattern: ^(0[1-9]|1[0-2])(\d{2})$
+      type: string
+      description: Expiry date in MMYY format
     HealthCheckResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -198,11 +204,7 @@ components:
           type: string
           description: Last four digits of the card fpan.
         expiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: Expiry date of the fpan.
+          $ref: '#/components/schemas/Expiry'
         panSequenceNumber:
           pattern: ^0\d{2}$
           type: string
@@ -279,12 +281,7 @@ components:
           type: string
           description: A unique identifier for a BankAxept card instance.
         newCardExpiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: The new card expiry date (either for the original or the new
-            PAN) in the format MMYY.
+          $ref: '#/components/schemas/Expiry'
         newCardSequenceNumber:
           pattern: ^0\d{2}$
           type: string
@@ -305,16 +302,15 @@ components:
           description: An identifier of the key (the fingerprint of the certificate)
             used to encrypt data between the DES and the Issuer.
         replaceCardDetails:
-          description: Details of the card to be replaced and the new card information.
           $ref: '#/components/schemas/ReplaceCardDetails'
         replaceCardDetailsList:
           deprecated: true
           maxItems: 99
           type: array
           description: >
-            **Deprecated** — use `replaceCardDetails` instead.
-            Details of the card to be replaced and the new card information.
-            If more than one card is to be replaced (batch replacement), one record
+            **Deprecated** — use `replaceCardDetails` instead.  
+            Details of the card to be replaced and the new card information.  
+            If more than one card is to be replaced (batch replacement), one record  
             per card must be provided.
           items:
             $ref: '#/components/schemas/ReplaceCardDetails'
@@ -329,14 +325,13 @@ components:
         - type: object
           properties:
             responseDetailsLcm:
-              description: Result of the replacement action for a single card.
               $ref: '#/components/schemas/ResponseDetailsLcm'
             responseDetailsLcmList:
               deprecated: true
               type: array
               description: >
-                **Deprecated** — `responseDetailsLcm` will be sent in response instead.
-                Result(s) of the replacement action. If more than one card
+                **Deprecated** — `responseDetailsLcm` will be sent in response instead.  
+                Result(s) of the replacement action. If more than one card  
                 is to be replaced, one result per card will be returned.
               items:
                 $ref: '#/components/schemas/ResponseDetailsLcm'
@@ -401,11 +396,7 @@ components:
             is according to ISO 8601. YYYY-MM-DDThh:mm:ss  The field is Conditional
             and only applicable if the token has been activated.
         tokenExpiryDate:
-          maxLength: 4
-          minLength: 4
-          pattern: ^(0[1-9]|1[0-2])(\d{2})$
-          type: string
-          description: Expiration date of the token formatted as MMYY.
+          $ref: '#/components/schemas/Expiry'
         tokenReferenceId:
           maxLength: 32
           type: string
@@ -425,10 +416,10 @@ components:
         tokenType:
           type: string
           description: |-
-            “EMBEDDED_SE” used for international wallets based on Secure Element (SE).
-
-            “HCE” used for international wallets based on Host Card Emulation (HCE).
-
+            “EMBEDDED_SE” used for international wallets based on Secure Element (SE).  
+            
+            “HCE” used for international wallets based on Host Card Emulation (HCE).  
+            
             “CARD_ON_FILE” used for ePayment.
           enum:
             - EMBEDDED_SE
@@ -472,12 +463,12 @@ components:
         requestReason:
           type: integer
           description: |-
-            Description provided by the issuer regarding the reason of specific lifecycle management action. Allowed values are:
-            * 11 => User decision
-            * 21 => Issuer decision
-            * 31 => Device lost
-            * 32 => Device stolen
-            * 131 => Device recovered
+            Description provided by the issuer regarding the reason of specific lifecycle management action. Allowed values are:  
+            * 11 => User decision  
+            * 21 => Issuer decision  
+            * 31 => Device lost  
+            * 32 => Device stolen  
+            * 131 => Device recovered  
             * 41 => DES decision
         token:
           maxLength: 19
@@ -507,14 +498,13 @@ components:
           type: string
           description: Unique identifier of the issuer.
         updateCardDetails:
-          description: Details of the card to be updated.
           $ref: '#/components/schemas/UpdateCardDetails'
         updateCardDetailsList:
           deprecated: true
           maxItems: 99
           type: array
           description: >
-            **Deprecated** — use `UpdateCardDetails` instead.
+            **Deprecated** — use `UpdateCardDetails` instead.  
             List of UpdateCardDetails records.
           items:
             $ref: '#/components/schemas/UpdateCardDetails'
@@ -531,7 +521,6 @@ components:
             - processId
           properties:
             responseDetailsLcm:
-              description: Result of the update card action for a single card.
               $ref: '#/components/schemas/ResponseDetailsLcm'
             responseDetailsLcmList:
               deprecated: true
