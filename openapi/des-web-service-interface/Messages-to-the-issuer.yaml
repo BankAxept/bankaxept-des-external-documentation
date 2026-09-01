@@ -196,6 +196,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RequestEligibleCardResponse'
+  /requestEligibleCardByToken:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Request eligible card using a network token
+      description: RequestEligibleCardByToken is used by the DES to prompt the issuer to provide an card eligible for digitization given an network token known to the issuer.
+      operationId: requestEligibleCardByToken
+      requestBody:
+        description: Request for getting an eligible card using a token.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestEligibleCardByTokenRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestEligibleCardResponse'
+        400:
+          $ref: '#/components/responses/400Error'
+        422:
+          $ref: '#/components/responses/422Error'
+        500:
+          $ref: '#/components/responses/500Error'
   /expiryUpdateNotification:
     post:
       tags:
@@ -584,6 +611,25 @@ components:
               $ref: '#/components/schemas/KeyIndex'
             productId:
               $ref: '#/components/schemas/ProductId'
+    RequestEligibleCardByTokenRequest:
+      type: object
+      required:
+        - encryptedTokenInfo
+        - keyIndex
+        - processId
+        - tokenRequestorId
+        - tokenType
+      properties:
+        encryptedTokenInfo:
+          $ref: '#/components/schemas/EncryptedTokenInfo'
+        keyIndex:
+          $ref: '#/components/schemas/KeyIndex'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+        tokenRequestorId:
+          $ref: '#/components/schemas/TokenRequestorId'
+        tokenType:
+          $ref: '#/components/schemas/TokenType'
     ExpiryUpdateNotificationRequest:
       required:
         - tokenReferenceId
