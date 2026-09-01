@@ -588,11 +588,15 @@ components:
       required:
         - tokenReferenceId
         - newExpiryDate
+        - processId
+      type: object
       properties:
         tokenReferenceId:
           $ref: '#/components/schemas/TokenReferenceId'
         newExpiryDate:
           $ref: '#/components/schemas/Expiry'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
     ScoringInformation:
       required:
         - levelOfTrust
