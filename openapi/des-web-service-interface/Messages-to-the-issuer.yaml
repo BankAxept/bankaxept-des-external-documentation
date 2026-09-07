@@ -196,19 +196,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RequestEligibleCardResponse'
-  /requestEligibleCardByToken:
+  /requestAccountNumberByToken:
     post:
       tags:
         - des-to-issuer
-      summary: Request eligible card using a network token
-      description: RequestEligibleCardByToken is used by the DES to prompt the issuer to provide an card eligible for digitization given an network token known to the issuer.
-      operationId: requestEligibleCardByToken
+      summary: Request account number associated to the VISA network token
+      description: requestAccountNumberByToken is used by the DES to prompt the issuer to provide an account number associated to a VISA network token known to the issuer.
+      operationId: requestAccountNumberByToken
       requestBody:
-        description: Request for getting an eligible card using a token.
+        description: Request for getting an account number using a token.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestEligibleCardByTokenRequest'
+              $ref: '#/components/schemas/RequestAccountNumberByTokenRequest'
         required: true
       responses:
         200:
@@ -216,7 +216,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RequestEligibleCardResponse'
+                $ref: '#/components/schemas/RequestAccountNumberByTokenResponse'
         400:
           $ref: '#/components/responses/400Error'
         422:
@@ -639,6 +639,23 @@ components:
           $ref: '#/components/schemas/TokenReferenceId'
         newExpiryDate:
           $ref: '#/components/schemas/Expiry'
+    RequestAccountNumberByTokenRequest:
+      type: object
+      required:
+        - tokenRef
+        - processId
+      properties:
+        tokenRef:
+          $ref: '#/components/schemas/TokenReferenceId'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+    RequestAccountNumberByTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            accountInfo:
+              $ref: '#/components/schemas/EncryptedAccountInfo'
     ScoringInformation:
       required:
         - levelOfTrust
@@ -771,6 +788,10 @@ components:
       enum:
         - DES
         - TSH
+    EncryptedAccountInfo:
+      type: string
+      description:
+        Base64-encoded string of encrypted account information.
     IssuerId:
       maxLength: 10
       type: string
