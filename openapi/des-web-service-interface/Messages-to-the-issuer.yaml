@@ -622,6 +622,8 @@ components:
           $ref: '#/components/schemas/TokenReferenceId'
         newExpiryDate:
           $ref: '#/components/schemas/Expiry'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
     RequestAccountNumberByTokenRequest:
       type: object
       required:
