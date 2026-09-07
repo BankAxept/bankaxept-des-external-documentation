@@ -615,6 +615,8 @@ components:
       required:
         - tokenReferenceId
         - newExpiryDate
+        - processId
+      type: object
       properties:
         tokenReferenceId:
           $ref: '#/components/schemas/TokenReferenceId'
