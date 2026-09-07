@@ -611,25 +611,6 @@ components:
               $ref: '#/components/schemas/KeyIndex'
             productId:
               $ref: '#/components/schemas/ProductId'
-    RequestEligibleCardByTokenRequest:
-      type: object
-      required:
-        - encryptedTokenInfo
-        - keyIndex
-        - processId
-        - tokenRequestorId
-        - tokenType
-      properties:
-        encryptedTokenInfo:
-          $ref: '#/components/schemas/EncryptedTokenInfo'
-        keyIndex:
-          $ref: '#/components/schemas/KeyIndex'
-        processId:
-          $ref: '#/components/schemas/ProcessId'
-        tokenRequestorId:
-          $ref: '#/components/schemas/TokenRequestorId'
-        tokenType:
-          $ref: '#/components/schemas/TokenType'
     ExpiryUpdateNotificationRequest:
       required:
         - tokenReferenceId
@@ -655,7 +636,7 @@ components:
         - type: object
           properties:
             accountInfo:
-              $ref: '#/components/schemas/EncryptedAccountInfo'
+              $ref: '#/components/schemas/EncryptedAccountNumber'
     ScoringInformation:
       required:
         - levelOfTrust
@@ -788,10 +769,10 @@ components:
       enum:
         - DES
         - TSH
-    EncryptedAccountInfo:
+    EncryptedAccountNumber:
       type: string
       description:
-        Base64-encoded string of encrypted account information.
+        Base64-encoded string of encrypted account number.
     IssuerId:
       maxLength: 10
       type: string
