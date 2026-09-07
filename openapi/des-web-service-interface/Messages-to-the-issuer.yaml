@@ -200,8 +200,8 @@ paths:
     post:
       tags:
         - des-to-issuer
-      summary: Request account number associated to the VISA network token
-      description: requestAccountNumberByToken is used by the DES to prompt the issuer to provide an account number associated to a VISA network token known to the issuer.
+      summary: Request account number associated to a network token
+      description: requestAccountNumberByToken is used by the DES to prompt the issuer to provide an account number associated to a network token known to the issuer.
       operationId: requestAccountNumberByToken
       requestBody:
         description: Request for getting an account number using a token.
