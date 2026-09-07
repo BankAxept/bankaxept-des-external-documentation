@@ -637,6 +637,8 @@ components:
           properties:
             accountInfo:
               $ref: '#/components/schemas/EncryptedAccountNumber'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
     ScoringInformation:
       required:
         - levelOfTrust
