@@ -196,6 +196,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RequestEligibleCardResponse'
+  /requestAccountNumberByToken:
+    post:
+      tags:
+        - des-to-issuer
+      summary: Request account number associated to a network token
+      description: requestAccountNumberByToken is used by the DES to prompt the issuer to provide an account number associated to a network token known to the issuer.
+      operationId: requestAccountNumberByToken
+      requestBody:
+        description: Request for getting an account number using a token.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAccountNumberByTokenRequest'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestAccountNumberByTokenResponse'
+        400:
+          $ref: '#/components/responses/400Error'
+        422:
+          $ref: '#/components/responses/422Error'
+        500:
+          $ref: '#/components/responses/500Error'
   /expiryUpdateNotification:
     post:
       tags:
@@ -597,6 +624,25 @@ components:
           $ref: '#/components/schemas/Expiry'
         processId:
           $ref: '#/components/schemas/ProcessId'
+    RequestAccountNumberByTokenRequest:
+      type: object
+      required:
+        - tokenRef
+        - processId
+      properties:
+        tokenRef:
+          $ref: '#/components/schemas/TokenReferenceId'
+        processId:
+          $ref: '#/components/schemas/ProcessId'
+    RequestAccountNumberByTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            encryptedAccountInfo:
+              $ref: '#/components/schemas/EncryptedAccountNumber'
+            processId:
+              $ref: '#/components/schemas/ProcessId'
     ScoringInformation:
       required:
         - levelOfTrust
@@ -729,6 +775,10 @@ components:
       enum:
         - DES
         - TSH
+    EncryptedAccountNumber:
+      type: string
+      description:
+        Base64-encoded string of encrypted account number.
     IssuerId:
       maxLength: 10
       type: string
