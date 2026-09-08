@@ -639,7 +639,7 @@ components:
         - $ref: '#/components/schemas/BaseResponse'
         - type: object
           properties:
-            accountInfo:
+            encryptedAccountInfo:
               $ref: '#/components/schemas/EncryptedAccountNumber'
             processId:
               $ref: '#/components/schemas/ProcessId'
