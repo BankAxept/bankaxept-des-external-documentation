@@ -79,6 +79,8 @@ paths:
       summary: Process callback
       description: ProcessCallback is a asynchronous response to a previous request from the issuer.
       operationId: processCallback
+      parameters:
+        - $ref: '#/components/parameters/IssuerID'
       requestBody:
         description: Process callback.
         content:
