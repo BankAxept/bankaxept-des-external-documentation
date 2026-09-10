@@ -70,16 +70,8 @@ paths:
         - issuer-to-des
       summary: Replace funding card details
       description: |-
-        The ReplaceCard API call is used by the issuer to update card PAN mapping information or the issuer product configuration ID for all tokens that are associated to a PAN. The fpan must be the same since otherwise the PAR will not be correctly linked.  
-        The allowed options for replacing card details are:  
-        * fpan (must be the same), Expiry date, PSN, Product Id.  
-        * fpan (must be the same), Expiry date, PSN.  
-        * Product Id.  
-        
-        The DES also supports batch card replacement via this API. In such case, the replaceCardDetailsList can contain up to 99 individual records.  
-        **Note:** `replaceCardDetailsList` is deprecated — use `replaceCardDetails` for new integrations.  
-        
-        *encryptedNewCardPan field containing a Base64-encoded encrypted newCardPan. The issuer will receive from BankAxept the certificate to be used when encrypting the data to BankAxept.*
+        The ReplaceCard call is used by the issuer to update card PAN mapping information for all tokens that are associated to a PAN. 
+        *encryptedNewCardPan* field contains the Base64-encoded encrypted card PAN.
       operationId: replaceCard
       parameters:
         - name: tid
@@ -102,7 +94,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReplaceCardResponse'
-      x-codegen-request-body-name: body
   /updateCardState:
     post:
       tags:
@@ -145,7 +136,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UpdateCardStateResponse'
-      x-codegen-request-body-name: body
 components:
   schemas:
     BaseResponse:
@@ -271,6 +261,9 @@ components:
     ReplaceCardDetails:
       required:
         - issuerCardRefId
+        - encryptedNewCardPan
+        - newCardExpiryDate
+        - newCardSequenceNumber
       type: object
       properties:
         encryptedNewCardPan:
