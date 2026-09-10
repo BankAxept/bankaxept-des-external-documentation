@@ -509,7 +509,6 @@ components:
         - tokenStorageId
         - tokenType
         - TokenStorageType
-        - walletCardRefId
       properties:
         activeTokenCount:
           $ref: '#/components/schemas/ActiveTokenCount'
