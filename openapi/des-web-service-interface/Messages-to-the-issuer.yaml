@@ -786,8 +786,9 @@ components:
       description: Unique identifier of the issuer.
     KeyIndex:
       maxLength: 500
+      minLength: 1
       type: string
-      description: An identifier of the key (the fingerprint of the certificate)
+      description: An identifier of the key (usually the fingerprint of the certificate)
         used to encrypt data between the DES and the Issuer.
     ProcessId:
       maxLength: 120

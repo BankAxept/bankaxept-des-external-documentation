@@ -176,6 +176,12 @@ components:
       pattern: ^(0[1-9]|1[0-2])(\d{2})$
       type: string
       description: Expiry date in MMYY format
+    KeyIndex:
+      maxLength: 500
+      minLength: 1
+      type: string
+      description: An identifier of the key (usually the fingerprint of the certificate)
+        used to encrypt data between the DES and the Issuer.
     HealthCheckResponse:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
@@ -223,10 +229,7 @@ components:
           type: string
           description: Unique identifier of the issuer.
         keyIndex:
-          maxLength: 500
-          type: string
-          description: An identifier of the key (the fingerprint of the certificate)
-            used to encrypt data between the DES and the Issuer.
+          $ref: '#/components/schemas/KeyIndex'
         token:
           maxLength: 19
           type: string
@@ -290,10 +293,7 @@ components:
           type: string
           description: Unique identifier of the issuer.
         keyIndex:
-          maxLength: 500
-          type: string
-          description: An identifier of the key (the fingerprint of the certificate)
-            used to encrypt data between the DES and the Issuer.
+          $ref: '#/components/schemas/KeyIndex'
         replaceCardDetails:
           $ref: '#/components/schemas/ReplaceCardDetails'
         replaceCardDetailsList:
@@ -409,20 +409,17 @@ components:
         tokenType:
           type: string
           description: |-
-            “EMBEDDED_SE” used for international wallets based on Secure Element (SE).  
+            "EMBEDDED_SE" used for wallets based on Secure Element (SE).  
             
-            “HCE” used for international wallets based on Host Card Emulation (HCE).  
+            "HCE" used for wallets based on Host Card Emulation (HCE).  
             
-            “CARD_ON_FILE” used for ePayment.
+            "CARD_ON_FILE" used for ePayment.
           enum:
             - EMBEDDED_SE
             - HCE
             - CARD_ON_FILE
         keyIndex:
-          maxLength: 500
-          type: string
-          description: An identifier of the key (the fingerprint of the certificate)
-            used to encrypt data between the DES and the Issuer.
+          $ref: '#/components/schemas/KeyIndex'
     TokenInfo:
       required:
         - tokenReferenceId
