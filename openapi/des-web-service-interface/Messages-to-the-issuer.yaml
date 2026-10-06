@@ -556,7 +556,6 @@ components:
         - tokenStorageId
         - tokenType
         - tokenStorageType
-        - walletCardRefId
       properties:
         encryptedTokenInfo:
           $ref: '#/components/schemas/EncryptedTokenInfo'
