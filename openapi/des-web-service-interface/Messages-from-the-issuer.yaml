@@ -253,14 +253,20 @@ components:
       allOf:
         - $ref: '#/components/schemas/BaseResponse'
         - type: object
-          required:
-            - inquiryDetailsList
           properties:
+            inquiryDetails:
+              $ref: '#/components/schemas/InquiryDetails'
             inquiryDetailsList:
+              deprecated: true
               type: array
               description: Detailed information of cards and tokens.
               items:
                 $ref: '#/components/schemas/InquiryDetails'
+        - oneOf:
+          - required:
+              - inquiryDetailsList
+          - required:
+              - inquiryDetails
     ReplaceCardDetails:
       required:
         - issuerCardRefId
